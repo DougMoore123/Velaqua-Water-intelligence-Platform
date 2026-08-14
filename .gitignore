@@ -65,6 +65,7 @@ data/raw_synthetic/
 data/bronze/
 data/silver/
 data/gold/
+data/monitoring/
 *.parquet
 *.delta
 

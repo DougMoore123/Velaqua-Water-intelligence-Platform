@@ -1,0 +1,32 @@
+{
+  "request_metrics": {
+    "average_latency_ms": 145.0947,
+    "p95_latency_ms": 201.59,
+    "p99_latency_ms": 218.02,
+    "throughput_rps_estimate": 6.8921,
+    "error_rate": 0.006667,
+    "availability": 0.996667
+  },
+  "resource_metrics": {
+    "avg_cpu_percent": 33.7209,
+    "avg_memory_percent": 47.9543
+  },
+  "data_quality": {
+    "missing_rate": 0.079833,
+    "duplicate_rate": 0.0
+  },
+  "schema_changes": {
+    "added_columns": [],
+    "removed_columns": []
+  },
+  "drift": {
+    "prediction_drift_psi": 0.031782,
+    "confidence_drift_psi": 0.204782
+  },
+  "outcome_quality": {
+    "false_alarm_rate": 0.675449,
+    "missed_leak_rate": 0.336986,
+    "avg_detection_delay_minutes": 6.8798,
+    "avg_business_impact_usd": 561.6341
+  }
+}

@@ -14,6 +14,7 @@ from sklearn.ensemble import IsolationForest, RandomForestClassifier
 from sklearn.metrics import (
     average_precision_score,
     brier_score_loss,
+    classification_report,
     confusion_matrix,
     f1_score,
     precision_score,
@@ -545,6 +546,22 @@ def _train_and_evaluate_model(
         early_detection_value,
     )
     calibration = _calibration_metrics(split.y_test, test_score)
+    val_classification = classification_report(
+        split.y_val,
+        (val_score >= threshold).astype(int),
+        labels=[0, 1],
+        target_names=["no_leak", "leak"],
+        output_dict=True,
+        zero_division=0,
+    )
+    test_classification = classification_report(
+        split.y_test,
+        (test_score >= threshold).astype(int),
+        labels=[0, 1],
+        target_names=["no_leak", "leak"],
+        output_dict=True,
+        zero_division=0,
+    )
 
     model_artifact = model_dir / "model.joblib"
     joblib.dump({"model": model, "extras": extras, "features": feature_names}, model_artifact)
@@ -561,6 +578,20 @@ def _train_and_evaluate_model(
     calibration_path = model_dir / "calibration_test.json"
     calibration_path.write_text(json.dumps(calibration, indent=2), encoding="utf-8")
 
+    classification_path = model_dir / "classification_report.json"
+    classification_path.write_text(
+        json.dumps(
+            {
+                "model": model_name,
+                "threshold": threshold,
+                "validation": val_classification,
+                "test": test_classification,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
     report = {
         "model": model_name,
         "status": "trained",
@@ -572,11 +603,16 @@ def _train_and_evaluate_model(
             "brier_score": calibration["brier_score"],
             "expected_calibration_error": calibration["expected_calibration_error"],
         },
+        "classification_report": {
+            "validation": val_classification,
+            "test": test_classification,
+        },
         "artifacts": {
             "model": str(model_artifact),
             "confusion_matrix": str(confusion_path),
             "threshold_sensitivity": str(threshold_path),
             "calibration": str(calibration_path),
+            "classification_report": str(classification_path),
         },
     }
 
@@ -611,7 +647,13 @@ def _train_and_evaluate_model(
         run_name=f"{model_name}_suite",
         params=mlflow_params,
         metrics=mlflow_metrics,
-        artifact_paths=[model_artifact, confusion_path, threshold_path, calibration_path],
+        artifact_paths=[
+            model_artifact,
+            confusion_path,
+            threshold_path,
+            calibration_path,
+            classification_path,
+        ],
         experiment_name=experiment_name,
     )
 
