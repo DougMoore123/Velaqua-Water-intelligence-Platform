@@ -59,3 +59,27 @@ Environment controls:
 Safety behavior:
 - Blocks unsafe generated content via blocklist checks.
 - Uses fallback evidence when safety check triggers.
+
+## Note Summary
+
+This RAG guide defines the operating conditions for grounded, auditable, and safe generation. The purpose is to keep model output tied to retrieved evidence while preserving a resilient fallback path when retrieval or model dependencies fail.
+
+The main quality checks are:
+
+$$
+\text{Grounded Rate} = \frac{\text{Grounded Responses}}{\text{Total Responses}}
+$$
+
+$$
+\text{Citation Rate} = \frac{\text{Responses with Valid Citations}}{\text{Total Responses}}
+$$
+
+$$
+\text{Hallucination Rate} = \frac{\text{Unsupported Claims}}{\text{Total Claims}}
+$$
+
+$$
+\text{Retrieval Recall} = \frac{\text{Relevant Documents Retrieved}}{\text{Total Relevant Documents}}
+$$
+
+The intended operating condition is grounded rate and citation rate near 1.0 while hallucination rate stays near 0.0.

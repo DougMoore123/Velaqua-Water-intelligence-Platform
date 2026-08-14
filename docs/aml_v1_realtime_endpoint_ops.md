@@ -89,3 +89,27 @@ Recommended production path:
 ## 7) Migration Reminder
 
 Azure ML CLI v1 is in retirement window. Keep these scripts as compatibility shims and plan migration to CLI v2 managed online endpoints.
+
+## Note Summary
+
+This endpoint operations guide defines the control conditions for a production realtime model. The objective is to keep serving latency low, request handling reliable, and authentication posture compliant while preserving a clear rollback path and safe promotion workflow.
+
+The serving health objective is:
+
+$$
+\text{Serving Health} = \text{Availability} \land \text{Auth Compliance} \land \text{Latency SLO} \land \text{Rollback Readiness}
+$$
+
+The operational performance target is:
+
+$$
+\text{P95 Latency} < \text{SLO Threshold}
+$$
+
+and
+
+$$
+\text{Error Rate} = \frac{\text{Failed Requests}}{\text{Total Requests}} \ll 1
+$$
+
+This ensures the realtime endpoint remains healthy enough for critical leak detection decisions without exposing unsafe or ungoverned access paths.

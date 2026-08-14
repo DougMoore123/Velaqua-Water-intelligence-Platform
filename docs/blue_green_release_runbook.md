@@ -58,3 +58,15 @@ If acceptance criteria fail, promotion script exits non-zero and does not change
 ./scripts/smoke_test_realtime_endpoint_v1.sh
 python scripts/load_test_endpoint.py --url http://localhost:8000/predict --requests 300 --concurrency 30
 ```
+
+## Note Summary
+
+This runbook defines the controlled transition from a known-good blue deployment to a candidate green deployment. The purpose is to reduce release risk by validating score stability, limiting rollout exposure, and preserving a safe rollback path if the new version fails a production gate.
+
+The promotion decision is:
+
+$$
+\text{Promote Green} = \left(\Delta \text{Mean Score} \leq \theta_1\right) \land \left(\Delta \text{Max Score} \leq \theta_2\right) \land \left(\text{Smoke Test Passed}\right)
+$$
+
+Where $\theta_1$ and $\theta_2$ are the acceptance thresholds defined in the deployment gate. If the observed deltas exceed those limits, the rollout remains only for evaluation or reverts immediately to blue.

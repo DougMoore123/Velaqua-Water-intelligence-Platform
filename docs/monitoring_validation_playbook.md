@@ -68,3 +68,31 @@ This attempts baseline setup for:
 - Azure Policy assignment
 - Private endpoint bootstrap
 - Storage network restrictions
+
+## Note Summary
+
+This playbook defines the operational validation gate for production readiness. It combines latency, throughput, availability, data quality, and drift checks to determine whether the service remains healthy enough to support live leak detection decisions.
+
+The key operational calculations are:
+
+$$
+\text{Throughput} = \frac{\text{Requests Completed}}{\text{Time Window}}
+$$
+
+$$
+\text{Error Rate} = \frac{\text{Failed Requests}}{\text{Total Requests}}
+$$
+
+$$
+\text{Availability} = \frac{\text{Uptime}}{\text{Total Time}}
+$$
+
+$$
+\text{Detection Delay} = t_{\text{detected}} - t_{\text{event}}
+$$
+
+$$
+\text{PSI} = \sum_i (p_i - q_i)\ln\left(\frac{p_i}{q_i}\right)
+$$
+
+Operationally, throughput must remain above target, availability above the agreed threshold, and PSI low enough to indicate stable distributions over time.
