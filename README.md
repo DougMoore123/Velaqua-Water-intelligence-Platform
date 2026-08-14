@@ -2,249 +2,703 @@
 
 [![CI](https://github.com/DougMoore123/Velaqua-Water-intelligence-Platform/actions/workflows/ci.yml/badge.svg)](https://github.com/DougMoore123/Velaqua-Water-intelligence-Platform/actions/workflows/ci.yml)
 
-### Enterprise AI Decision Intelligence for Water Distribution Networks
+## Enterprise AI Decision Intelligence for Water Distribution Networks
 
-**Microsoft Azure · Data Engineering · Predictive AI · MLOps · GenAI/RAG · Human-in-the-Loop Governance**
+**Enterprise Architecture · Microsoft Azure · Data Engineering · Predictive AI · MLOps · GenAI/RAG · Responsible AI · Human-in-the-Loop Governance**
 
-> **Velaqua** is an Azure-based enterprise AI platform designed to transform water-network telemetry into leak-risk predictions, evidence-backed incident recommendations, and governed operational actions.
+> **Velaqua Solutions** is an enterprise smart-water intelligence platform designed to transform distributed water-network telemetry into prioritized incidents, predictive risk, grounded operational evidence, and governed human decision support.
 
-| Platform Attribute | Implementation |
+| Platform Attribute | Current Position |
 |---|---|
-| **Release Position** | Pre-Production Reference Implementation |
-| **Primary Benchmark** | LeakG3PD — Net3 |
+| **Business Domain** | Water Utility Intelligence |
+| **Architecture Pattern** | Cloud-native, event-ready, governed enterprise AI |
+| **Primary Predictive Benchmark** | LeakG3PD — Net3 |
 | **Cloud Platform** | Microsoft Azure |
 | **Data Platform** | ADLS Gen2 + Azure Databricks / PySpark |
-| **Machine Learning** | Azure Machine Learning + MLflow |
+| **ML Platform** | Azure Machine Learning + MLflow |
 | **Decision Intelligence** | FastAPI |
 | **GenAI / RAG** | Azure AI Search + Azure OpenAI |
 | **Infrastructure as Code** | Azure Bicep |
 | **CI/CD** | GitHub Actions |
-| **Governance** | Human approval, model gates, monitoring, rollback |
+| **Release Position** | **Pre-Production Reference Implementation** |
+| **Production Decision** | **NO-GO until defined release gates are satisfied** |
 
 ---
 
-## Executive Summary
+# Executive Summary
 
-Water utilities increasingly operate across smart meters, pressure and flow sensors, SCADA systems, hydraulic models, asset-management platforms, work-management systems, and customer-service environments.
+Modern water utilities generate large volumes of operational data across smart meters, pressure and flow sensors, SCADA systems, hydraulic models, pumps, tanks, asset-management platforms, work-management systems, and customer-service environments.
 
-The enterprise challenge is not simply collecting telemetry.
+The enterprise problem is not simply acquiring telemetry.
 
-The harder problem is converting distributed operational signals into a **timely, explainable, traceable, and accountable decision**.
+The harder problem is converting fragmented operational signals into a **timely, explainable, traceable, financially defensible, and accountable decision**.
 
-Velaqua addresses that problem as an end-to-end AI decision-intelligence platform.
+Velaqua addresses that problem as an end-to-end **AI decision-intelligence platform**.
 
-The platform combines governed data ingestion, scalable data engineering, predictive leak intelligence, temporal model validation, model lifecycle controls, real-time inference, retrieval-augmented evidence, human authorization, observability, security, and controlled release engineering.
+The platform combines:
 
-A foundational design principle is:
+- governed batch and streaming ingestion,
+- medallion data engineering,
+- data-quality controls,
+- network-aware feature engineering,
+- predictive leak intelligence,
+- temporal model validation,
+- model lifecycle governance,
+- real-time and batch serving patterns,
+- API-based decision intelligence,
+- retrieval-augmented operational evidence,
+- explicit human authorization,
+- enterprise security,
+- observability,
+- resilience,
+- FinOps,
+- CI/CD,
+- blue/green deployment,
+- rollback,
+- and closed-loop operational learning.
+
+A foundational architecture principle is:
 
 > **A model prediction is not the business outcome.**
 
-Velaqua therefore separates **predictive intelligence** from **operational authority**.
+Velaqua therefore deliberately separates **predictive intelligence** from **operational authority**.
 
-The system can detect, prioritize, explain, and recommend. Material operational actions remain subject to attributable human authorization.
+AI may detect, classify, prioritize, localize, explain, and recommend.
 
-The current implementation uses **LeakG3PD Net3** as the primary predictive-AI benchmark while preserving an architecture capable of supporting future live AMI, SCADA, IoT, CMMS, GIS, asset, and customer-service data sources.
+Material field actions remain subject to accountable human authorization.
+
+The current implementation uses **LeakG3PD Net3** as its primary predictive-AI benchmark while preserving a platform architecture capable of supporting future live AMI, SCADA, IoT, GIS, CMMS, asset, field-service, and customer-service integration.
+
+---
+
+# Table of Contents
+
+- [Strategic Context](#strategic-context)
+- [Business Problem](#business-problem)
+- [Business Goals](#business-goals)
+- [Success Measurement](#success-measurement)
+- [Stakeholders & Decision Rights](#stakeholders--decision-rights)
+- [Strategic SWOT](#strategic-swot)
+- [Architecture Principles](#architecture-principles)
+- [Business Capability Architecture](#business-capability-architecture)
+- [Enterprise AI Architecture](#enterprise-ai-architecture)
+- [Architecture Lifecycle](#architecture-lifecycle)
+- [Data Architecture](#data-architecture)
+- [Predictive AI Architecture](#predictive-ai-architecture)
+- [Decision Intelligence & RAG](#decision-intelligence--rag)
+- [Security Architecture](#security-architecture)
+- [MLOps & Release Engineering](#mlops--release-engineering)
+- [Observability & Resilience](#observability--resilience)
+- [Model Governance](#model-governance)
+- [Responsible AI](#responsible-ai)
+- [FinOps & Business Value](#finops--business-value)
+- [Current Validation Evidence](#current-validation-evidence)
+- [Production Release Gates](#production-release-gates)
+- [Repository Structure](#repository-structure)
+- [Getting Started](#getting-started)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Known Limitations](#known-limitations)
+- [Roadmap](#roadmap)
+- [Engineering Position](#engineering-position)
+
+---
+
+# Strategic Context
+
+Velaqua Solutions is a fictional B2B smart-water technology organization used to model the enterprise architecture, AI, data, integration, security, governance, and operating requirements of a modern utility-intelligence provider.
+
+The platform sits between:
+
+**physical infrastructure → operational telemetry → AI intelligence → human decisions → field execution**
+
+The initiative is intentionally designed as an **enterprise transformation program**, not as a standalone machine-learning experiment.
+
+```text
+Physical Water Network
+        ↓
+Operational Telemetry
+        ↓
+Governed Data
+        ↓
+Predictive Intelligence
+        ↓
+Risk + Confidence + Evidence
+        ↓
+Human Decision
+        ↓
+Field / Business Action
+        ↓
+Operational Outcome
+        ↓
+Closed-Loop Learning
+```
+
+The desired transformation is from:
+
+> fragmented signals and reactive investigation
+
+to:
+
+> governed, evidence-backed, proactive operational intelligence.
 
 ---
 
 # Business Problem
 
-A typical water-utility incident can require multiple systems and teams:
+A typical water-utility incident may require multiple systems, teams, and manual handoffs.
 
 ```text
 Operational Signal
         ↓
-Alarm / Complaint
+Alarm / Customer Complaint
         ↓
 Investigation
         ↓
-Diagnosis
+Engineering Diagnosis
         ↓
 Leak Localization
         ↓
-Prioritization
+Risk Prioritization
         ↓
-Authorization
+Operational Authorization
         ↓
 Field Dispatch
         ↓
-Resolution
+Inspection / Repair
+        ↓
+Incident Closure
         ↓
 Outcome Capture
 ```
 
-Fragmented environments create operational friction through siloed telemetry, manual evidence correlation, inconsistent thresholds, high false-positive burden, subject-matter-expert dependency, delayed field action, incomplete traceability, and weak feedback between operational outcomes and analytics.
+Common structural constraints include:
+
+- siloed telemetry,
+- fragmented operational context,
+- point-to-point integration,
+- scheduled and file-based data movement,
+- manual evidence correlation,
+- specialist dependency,
+- inconsistent alert thresholds,
+- false-positive burden,
+- slow localization,
+- incomplete model and data lineage,
+- reactive work-management processes,
+- limited closed-loop learning,
+- weak cross-platform governance,
+- inconsistent observability,
+- and delayed customer communication.
 
 Velaqua introduces a governed intelligence layer across this lifecycle.
 
-| Business Need | Velaqua Response |
-|---|---|
-| Earlier leak identification | Predictive anomaly and leak detection |
-| Lower alert fatigue | Risk- and confidence-based prioritization |
-| Faster investigation | Correlated telemetry and network context |
-| Better localization | Hydraulic and topology-aware features |
-| Explainable decisions | Confidence, evidence, rationale, and citations |
-| Safer field operations | Human authorization for material actions |
-| Better operational learning | Incident outcomes returned to governed data products |
-| Reusable AI capability | Shared data, ML, API, security, and MLOps foundation |
+---
+
+# Business Goals
+
+The strategic objective is to create a reusable enterprise AI capability that improves the **speed, quality, economics, and accountability of water-network decisions**.
+
+| ID | Business Objective | Strategic Intent | Primary KPI Family |
+|---|---|---|---|
+| **BO-01** | Reduce detection-to-triage time | Identify material anomalies earlier and surface ranked operational incidents | Median detection-to-triage time; % detected before complaint |
+| **BO-02** | Improve incident localization | Narrow suspected location and affected assets before dispatch | Localization accuracy; search-area reduction; MTTR |
+| **BO-03** | Reduce avoidable field activity | Increase dispatch precision and provide better pre-investigation evidence | Truck rolls per confirmed incident; first-visit resolution |
+| **BO-04** | Reduce water-loss exposure | Support earlier identification and resolution of leakage conditions | Leak duration; estimated avoided loss; confirmed leak volume |
+| **BO-05** | Improve operator decision quality | Provide explainable risk, confidence, evidence, and history | Alert acceptance; override rate; decision-cycle time |
+| **BO-06** | Improve customer-service responsiveness | Provide trusted operational context for service inquiries | Handle time; repeat contacts; proactive notifications |
+| **BO-07** | Create a reusable enterprise data and AI foundation | Standardize telemetry, interfaces, lineage, monitoring, and governance | DQ SLOs; API reuse; model deployment lead time |
+| **BO-08** | Maintain executive control of risk and cost | Make reliability, control health, and economics visible | SLO attainment; control exceptions; cost per endpoint / incident |
 
 ---
 
-# Enterprise AI System Architecture
+# Success Measurement
+
+Velaqua is not evaluated solely by model accuracy.
+
+Success is measured across the complete value chain.
+
+| Measurement Domain | Representative Metrics | Why It Matters |
+|---|---|---|
+| **Business / Operations** | Detection-to-triage, MTTR, incident-cycle time, field dispatches | Demonstrates operational improvement |
+| **Water / Asset** | Leak duration, confirmed leak volume, avoided-loss estimate | Connects AI to physical-network value |
+| **Decision Quality** | Alert acceptance, override rate, approval rate, investigation burden | Measures human usefulness and trust |
+| **Predictive AI** | Precision, recall, F1, PR-AUC, calibration, detection delay | Measures model behavior |
+| **Data Quality** | Completeness, timeliness, validity, uniqueness | Measures trustworthiness of the data foundation |
+| **Platform / SRE** | Availability, p95/p99 latency, error rate, recovery | Measures service reliability |
+| **Governance / Risk** | Audit completeness, model exceptions, security findings | Measures enterprise control |
+| **FinOps** | Cost per endpoint, prediction, incident, training run | Measures economic sustainability |
+
+## KPI Hierarchy
+
+```mermaid
+flowchart TB
+
+    A["EXECUTIVE VALUE<br/>Reliability · Risk · Customer Trust · Capital Efficiency"]
+    B["BUSINESS OUTCOMES<br/>Detection Time · MTTR · Avoided Loss · Field Efficiency"]
+    C["DECISION QUALITY<br/>Acceptance · Overrides · Evidence Quality · Approval Quality"]
+    D["AI PERFORMANCE<br/>Precision · Recall · PR-AUC · Calibration · Detection Delay"]
+    E["DATA FOUNDATION<br/>Completeness · Timeliness · Validity · Uniqueness"]
+    F["PLATFORM HEALTH<br/>Availability · Latency · Errors · Recovery · Cost"]
+
+    F --> E --> D --> C --> B --> A
+
+    classDef executive fill:#0F172A,stroke:#0F172A,color:#FFFFFF,stroke-width:2px;
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef data fill:#DCFCE7,stroke:#16A34A,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef governance fill:#FFEDD5,stroke:#EA580C,color:#0F172A,stroke-width:2px;
+
+    class A executive;
+    class B,C human;
+    class D ai;
+    class E data;
+    class F governance;
+```
+
+## Business Target Policy
+
+Utility-specific benefit targets are **not invented**.
+
+Until representative customer discovery and baseline measurement are available:
+
+```text
+Business baseline = TBD — utility discovery required
+Business target   = TBD — accountable stakeholder approval required
+```
+
+This prevents a portfolio benchmark from being presented as realized utility value.
+
+---
+
+# Stakeholders & Decision Rights
+
+Velaqua spans business, operational, engineering, field, data, AI, security, and governance domains.
+
+## Stakeholder Model
+
+**R = Responsible · A = Accountable · C = Consulted · I = Informed**
+
+| Stakeholder | Primary Accountability | Decision Need | RACI |
+|---|---|---|---|
+| **Executive Sponsor / Utility GM** | Strategic outcomes, funding, risk acceptance | Value realization, service reliability, investment governance | **A** |
+| **Utility Operations Director** | Network operations and incident response | Detection speed, prioritization, response quality | **A/R** |
+| **Network Operations Analyst** | Day-to-day intelligence use | Ranked incidents and lower investigation burden | **R** |
+| **Water / Hydraulic Engineer** | Domain authority | Localization, hydraulic plausibility, engineering evidence | **C/R** |
+| **Asset Management Lead** | Asset strategy | Criticality, maintenance, lifecycle risk | **C** |
+| **Field Service Supervisor** | Dispatch and field execution | Safe and precise work execution | **R** |
+| **Field Technician** | Inspection and repair | Location, evidence, procedures, feedback | **R** |
+| **Customer Service Leader** | Customer-response process | Trusted operational context | **C** |
+| **Enterprise / Solution Architect** | Architecture coherence | Security, interoperability, resilience, standards | **R** |
+| **Data Engineering Lead** | Governed data products | Quality, timeliness, lineage, contracts | **R** |
+| **ML / AI Lead** | Model lifecycle | Performance, explainability, drift, model risk | **R** |
+| **Cybersecurity / IAM** | Security controls | Identity, least privilege, monitoring, exceptions | **A/R** |
+| **Data Governance / Compliance** | Data policy and auditability | Lineage, retention, accountability | **A/R** |
+| **Product / Customer Success** | Adoption and value | Repeatability and realized customer value | **R/C** |
+
+## Decision Rights
+
+| Decision | Accountable Owner | Architecture Principle |
+|---|---|---|
+| Model recommendation | AI / Analytics service | AI may recommend; it does not authorize material action |
+| Incident validation | Operations / Engineering | Human evaluates operational evidence |
+| Field dispatch | Authorized utility role | Human authorization required |
+| Repair execution | Field operations | Governed procedures and safety controls |
+| Model promotion | ML + Governance approver | Performance, risk, lineage, monitoring, rollback required |
+| Security exception | Security + accountable executive | Time-bounded documented risk acceptance |
+
+---
+
+# Strategic SWOT
+
+The SWOT is used as a consulting input to architecture decisions, not as a substitute for requirements engineering.
+
+| **Strengths** | **Weaknesses** |
+|---|---|
+| Unified business-to-AI architecture | AI value depends on representative, high-quality telemetry |
+| Explainable decision intelligence with human control | Current model evidence is not sufficient for production promotion |
+| Reusable Azure architecture | Integration complexity across heterogeneous utility systems |
+| Governed data and model lifecycle | Field-feedback quality affects closed-loop learning |
+| Closed-loop operational design | Some target integrations require real customer environments |
+
+| **Opportunities** | **Threats** |
+|---|---|
+| Reduce non-revenue-water exposure | Cybersecurity risk to critical infrastructure |
+| Predictive maintenance and asset intelligence | Model drift and network-condition changes |
+| AMI / SCADA / GIS / CMMS integration | Operator distrust or automation bias |
+| Demand forecasting and pressure optimization | False positives or missed events |
+| Multi-utility architecture reuse | Regulatory / contractual requirements |
+| RAG-assisted investigation | Prompt injection, poisoning, misinformation |
+| Executive analytics and FinOps | Cloud / GenAI cost growth |
+
+## SWOT-to-Architecture Mapping
+
+| Strategic Finding | Architecture Response |
+|---|---|
+| Telemetry quality dependence | Data contracts, DQ gates, quarantine, lineage |
+| Cybersecurity threat | Zero Trust, Entra ID, RBAC, Key Vault, Defender, Sentinel |
+| Model drift | ML monitoring, retraining triggers, rollback |
+| Operator trust | Confidence, evidence, explainability, human approval |
+| Utility variation | Canonical contracts and loosely coupled integration |
+| GenAI risk | Grounded retrieval, citations, bounded agency |
+| Cost growth | FinOps, budgets, unit economics, workload right-sizing |
+| Need for real feedback | Structured incident and field-outcome capture |
+
+---
+
+# Architecture Principles
+
+### 1. Business before technology
+
+Technology decisions must trace to business objectives, requirements, risk, and measurable outcomes.
+
+### 2. Governed data before governed AI
+
+Raw source evidence is preserved and transformed through controlled data products before use in model development.
+
+### 3. Separation of concerns
+
+Telemetry streaming, workflow messaging, batch processing, API integration, data engineering, model lifecycle, and operational execution are separate architectural responsibilities.
+
+### 4. Temporal integrity
+
+Time-series validation must prevent future data from leaking into model training or preprocessing.
+
+### 5. Evidence over invention
+
+RAG supports evidence retrieval and synthesis; it is not autonomous operational authority.
+
+### 6. Human decision rights
+
+Material physical actions require explicit authorization.
+
+### 7. Reproducibility
+
+Material model decisions must trace to data, feature, code, environment, model, deployment, and decision versions.
+
+### 8. Fail-safe release engineering
+
+Failed gates result in remediation or rollback—not silent promotion.
+
+### 9. Observability as a product capability
+
+Infrastructure, application, data, AI, security, and business outcomes are monitored independently.
+
+### 10. Cost is an architecture concern
+
+Platform complexity and AI consumption must remain attributable to measurable value.
+
+---
+
+# Architecture Visual Standard
+
+All diagrams use one semantic visual system.
+
+| Meaning | Color |
+|---|---|
+| **Human / Operations** | Blue |
+| **Data / Storage / Data Integration** | Green |
+| **AI / ML / RAG** | Purple |
+| **Governance / Security** | Orange |
+| **Decision / Approval Gate** | Yellow |
+| **Failure / Quarantine / Risk** | Red |
+| **External System / Source** | Gray |
+| **General Platform Service** | White |
+| **Executive / Strategic** | Navy |
+
+Solid arrows represent primary flows.
+
+Dashed arrows represent governance, monitoring, feedback, lineage, or learning loops.
+
+---
+
+# Business Capability Architecture
+
+```mermaid
+flowchart TB
+
+    subgraph STRAT["STRATEGIC MANAGEMENT"]
+        S1["Utility Intelligence Strategy"]
+        S2["Investment & Value Management"]
+        S3["Enterprise Architecture"]
+        S4["AI Governance"]
+    end
+
+    subgraph OPS["OPERATIONAL INTELLIGENCE"]
+        O1["Telemetry Monitoring"]
+        O2["Anomaly Detection"]
+        O3["Leak Intelligence"]
+        O4["Localization"]
+        O5["Incident Prioritization"]
+        O6["Decision Support"]
+    end
+
+    subgraph FIELD["FIELD OPERATIONS"]
+        F1["Work Management"]
+        F2["Dispatch"]
+        F3["Inspection"]
+        F4["Repair / Mitigation"]
+        F5["Outcome Capture"]
+    end
+
+    subgraph DATA["DATA & AI"]
+        D1["Data Ingestion"]
+        D2["Data Quality"]
+        D3["Governed Data Products"]
+        D4["Feature Engineering"]
+        D5["Model Development"]
+        D6["Model Governance"]
+        D7["Knowledge Retrieval"]
+    end
+
+    subgraph CX["CUSTOMER"]
+        C1["Service Inquiry Context"]
+        C2["Proactive Notification"]
+        C3["Incident Communication"]
+    end
+
+    subgraph FOUNDATION["ENTERPRISE FOUNDATION"]
+        G1["Identity & Security"]
+        G2["Integration"]
+        G3["Observability"]
+        G4["Resilience"]
+        G5["FinOps"]
+        G6["Audit & Compliance"]
+    end
+
+    STRAT --> OPS
+    DATA --> OPS
+    OPS --> FIELD
+    OPS --> CX
+
+    FOUNDATION -.-> STRAT
+    FOUNDATION -.-> OPS
+    FOUNDATION -.-> DATA
+    FOUNDATION -.-> FIELD
+    FOUNDATION -.-> CX
+
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef data fill:#DCFCE7,stroke:#16A34A,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef governance fill:#FFEDD5,stroke:#EA580C,color:#0F172A,stroke-width:2px;
+
+    class S1,S2,S3,S4 governance;
+    class O1,O2,O3,O4,O5,O6 ai;
+    class F1,F2,F3,F4,F5 human;
+    class D1,D2,D3,D4 data;
+    class D5,D6,D7 ai;
+    class C1,C2,C3 human;
+    class G1,G2,G3,G4,G5,G6 governance;
+```
+
+---
+
+# Enterprise AI Architecture
+
+> **Architecture status:** Target-state architecture with a repository-based reference implementation. Not every Azure service shown below is represented as production-deployed.
 
 ```mermaid
 flowchart LR
 
     subgraph SRC["1 · WATER NETWORK & ENTERPRISE SOURCES"]
         S1["LeakG3PD / Net3"]
-        S2["AMI / SCADA / IoT"]
-        S3["CMMS / Asset / Customer Systems"]
+        S2["AMI Smart Meters"]
+        S3["Pressure / Flow Sensors"]
+        S4["SCADA / Pumps / Tanks"]
+        S5["GIS / Network Topology"]
+        S6["CMMS / Asset Systems"]
+        S7["Customer Service"]
     end
 
-    subgraph ING["2 · INGESTION & LANDING"]
-        I1["Azure Data Factory"]
-        I2["Event Hubs / IoT Hub"]
-        I3["ADLS Gen2<br/>Raw Source of Truth"]
+    subgraph INT["2 · INTEGRATION & LANDING"]
+        I1["Azure Data Factory<br/>Batch / Historical"]
+        I2["Event Hubs / IoT Hub<br/>Streaming Telemetry"]
+        I3["API Management<br/>Governed APIs"]
+        I4["Service Bus<br/>Durable Workflow Events"]
+        I5["ADLS Gen2<br/>Immutable Raw Landing"]
+        I6["DLQ / Quarantine"]
     end
 
-    subgraph DATA["3 · DATA ENGINEERING"]
+    subgraph DATA["3 · GOVERNED DATA PLATFORM"]
         D1["Azure Databricks<br/>PySpark"]
-        D2["Bronze"]
-        D3["Silver"]
-        D4["Gold"]
+        D2["Bronze<br/>Source-Aligned"]
+        D3["Silver<br/>Validated / Standardized"]
+        D4["Gold<br/>Governed Data Products"]
+        D5["Feature Engineering"]
+        D6["Purview<br/>Catalog / Lineage"]
     end
 
     subgraph ML["4 · PREDICTIVE AI"]
-        M1["Feature Engineering"]
-        M2["Azure ML + MLflow"]
-        M3["Model Suite"]
-        M4["Technical + Business Evaluation"]
-        M5{"Production Model Gate"}
-        M6["Azure ML Model Registry"]
+        M1["Azure ML + MLflow"]
+        M2["Isolation Forest"]
+        M3["Random Forest"]
+        M4["XGBoost"]
+        M5["Calibration / Thresholding"]
+        M6["Scenario Stress Testing"]
+        M7{"Production Model Gate"}
+        M8["Azure ML Model Registry"]
     end
 
-    subgraph SERVE["5 · MODEL SERVING"]
-        E1["Azure ML Endpoint"]
-        E2["FastAPI Decision API"]
-        E3["API Management"]
+    subgraph SERVE["5 · SERVING & DECISION INTELLIGENCE"]
+        P1["AML Online / Realtime Endpoint"]
+        P2["AML Batch Endpoint"]
+        P3["FastAPI Decision Service"]
+        P4["Risk"]
+        P5["Confidence"]
+        P6["Evidence"]
+        P7["Recommended Action"]
     end
 
-    subgraph DI["6 · DECISION INTELLIGENCE"]
-        F1["Risk"]
-        F2["Confidence"]
-        F3["Evidence"]
-        F4["Recommended Action"]
+    subgraph RAG["6 · GENAI / RAG"]
+        R1["SOPs"]
+        R2["Maintenance Manuals"]
+        R3["Incident History"]
+        R4["Azure AI Search"]
+        R5["Azure OpenAI"]
+        R6["Grounded Evidence<br/>+ Citations"]
     end
 
-    subgraph RAG["7 · GENAI / RAG"]
-        G1["SOPs / Manuals / Incident History"]
-        G2["Azure AI Search"]
-        G3["Azure OpenAI"]
-        G4["Grounded Evidence Package"]
+    subgraph OPS["7 · BUSINESS EXECUTION"]
+        O1["Network Operations"]
+        O2["Hydraulic Engineering"]
+        O3{"Material Action?"}
+        O4{"Human Approval"}
+        O5["CMMS Work Order"]
+        O6["Field Workflow"]
+        O7["Customer Workflow"]
+        O8["Executive KPI"]
     end
 
-    subgraph EXEC["8 · BUSINESS EXECUTION"]
-        H1{"Material Field Action?"}
-        H2["Human Authorization"]
-        H3["CMMS / Field Workflow"]
-        H4["Operations Dashboard"]
-        H5["Customer / Executive Workflows"]
+    subgraph CTRL["8 · CROSS-CUTTING CONTROL PLANE"]
+        C1["Entra ID"]
+        C2["Managed Identity"]
+        C3["Key Vault"]
+        C4["Azure Policy"]
+        C5["Defender / Sentinel"]
+        C6["Azure Monitor"]
+        C7["Application Insights / Log Analytics"]
+        C8["GitHub Actions"]
+        C9["Blue / Green + Rollback"]
+        C10["FinOps / Budget Controls"]
     end
 
     S1 --> I1
     S2 --> I2
-    S3 --> I1
+    S3 --> I2
+    S4 --> I2
+    S5 --> I1
+    S6 --> I3
+    S7 --> I3
 
-    I1 --> I3
-    I2 --> I3
+    I1 --> I5
+    I2 --> I5
+    I2 -. "invalid / malformed event" .-> I6
+    I3 --> I4
 
-    I3 --> D1
-    D1 --> D2
-    D2 --> D3
-    D3 --> D4
+    I5 --> D1
+    D1 --> D2 --> D3 --> D4 --> D5
 
-    D4 --> M1
+    D6 -. "lineage / governance" .-> D2
+    D6 -. "lineage / governance" .-> D3
+    D6 -. "lineage / governance" .-> D4
+
+    D5 --> M1
     M1 --> M2
-    M2 --> M3
-    M3 --> M4
+    M1 --> M3
+    M1 --> M4
+
+    M2 --> M5
+    M3 --> M5
     M4 --> M5
 
-    M5 -->|Pass| M6
-    M5 -->|Fail| M2
+    M5 --> M6 --> M7
+    M7 -->|PASS| M8
+    M7 -->|FAIL| D5
 
-    M6 --> E1
-    E1 --> E2
-    E2 --> E3
+    M8 --> P1
+    M8 --> P2
+    P1 --> P3
+    P2 --> P3
 
-    E3 --> F1
-    E3 --> F2
-    E3 --> F3
-    E3 --> F4
+    P3 --> P4
+    P3 --> P5
+    P3 --> P6
+    P3 --> P7
 
-    G1 --> G2
-    G2 --> G3
-    G3 --> G4
-    G4 --> F3
+    R1 --> R4
+    R2 --> R4
+    R3 --> R4
+    R4 --> R5 --> R6 --> P6
 
-    F1 --> H1
-    F2 --> H1
-    F3 --> H1
-    F4 --> H1
+    P4 --> O1
+    P5 --> O1
+    P6 --> O1
+    P7 --> O1
 
-    H1 -->|Yes| H2
-    H2 -->|Approved| H3
-    H2 -->|Rejected / Deferred| H4
+    O1 --> O2 --> O3
 
-    H1 -->|No| H4
+    O3 -->|NO| O8
+    O3 -->|YES| O4
 
-    H3 --> H5
-    H4 --> H5
+    O4 -->|APPROVED| O5 --> O6 --> O7
+    O4 -->|REJECTED / DEFERRED| O8
 
-    subgraph CTRL["9 · CROSS-CUTTING CONTROL PLANE"]
-        C1["Entra ID / Managed Identity / Key Vault"]
-        C2["Azure Monitor / App Insights / Log Analytics"]
-        C3["Purview / Azure Policy"]
-        C4["Defender / Sentinel"]
-        C5["GitHub Actions / CI-CD"]
-        C6["Blue-Green / Rollback / Approval Gates"]
-    end
+    O6 -. "confirmed outcome" .-> D4
+
+    C1 -.-> P3
+    C2 -.-> P1
+    C3 -.-> P3
+    C4 -.-> DATA
+    C5 -.-> SERVE
+    C6 -.-> SERVE
+    C7 -.-> P3
+    C8 -.-> M1
+    C8 -.-> P1
+    C9 -.-> P1
+    C10 -.-> CTRL
+
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef data fill:#DCFCE7,stroke:#16A34A,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef governance fill:#FFEDD5,stroke:#EA580C,color:#0F172A,stroke-width:2px;
+    classDef decision fill:#FEF9C3,stroke:#CA8A04,color:#0F172A,stroke-width:2px;
+    classDef risk fill:#FEE2E2,stroke:#DC2626,color:#0F172A,stroke-width:2px;
+    classDef external fill:#F3F4F6,stroke:#6B7280,color:#0F172A,stroke-width:2px;
+    classDef general fill:#FFFFFF,stroke:#334155,color:#0F172A,stroke-width:2px;
+
+    class S1,S2,S3,S4,S5,S6,S7 external;
+    class I1,I2,I5,D1,D2,D3,D4,D5 data;
+    class I6 risk;
+    class I3,I4 general;
+    class M1,M2,M3,M4,M5,M6,M8,R4,R5,R6 ai;
+    class M7,O3,O4 decision;
+    class P1,P2,P3 general;
+    class P4,P5,P6,P7 decision;
+    class R1,R2,R3 external;
+    class O1,O2,O5,O6,O7,O8 human;
+    class D6,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10 governance;
+
+    style SRC fill:#F8FAFC,stroke:#CBD5E1
+    style INT fill:#F8FAFC,stroke:#CBD5E1
+    style DATA fill:#F8FAFC,stroke:#CBD5E1
+    style ML fill:#F8FAFC,stroke:#CBD5E1
+    style SERVE fill:#F8FAFC,stroke:#CBD5E1
+    style RAG fill:#F8FAFC,stroke:#CBD5E1
+    style OPS fill:#F8FAFC,stroke:#CBD5E1
+    style CTRL fill:#FFF7ED,stroke:#FDBA74
 ```
-
-## Architecture Principles
-
-**Business-first architecture**  
-Technology decisions trace back to operational outcomes, functional requirements, non-functional requirements, and governance obligations.
-
-**Separation of concerns**  
-Telemetry streaming, batch movement, APIs, governed data, model lifecycle, and business execution are treated as separate architectural responsibilities.
-
-**Governed data before governed AI**  
-Raw source evidence remains traceable through Bronze, Silver, and Gold layers before model development.
-
-**Temporal integrity**  
-Time-series validation is chronological so future information cannot contaminate training.
-
-**Human decision rights**  
-AI recommendations do not independently authorize material physical actions.
-
-**Evidence over invention**  
-Generative AI is used as a grounded evidence service rather than autonomous operational authority.
-
-**Fail-safe release engineering**  
-Production promotion requires measurable acceptance criteria, monitoring, approval, and rollback.
 
 ---
 
-# Architecture-to-Production Lifecycle
+# Architecture Lifecycle
 
-Velaqua follows a formal enterprise architecture and implementation lifecycle.
+Velaqua follows a formal architecture-to-production lifecycle.
 
-| Phase | Purpose | Scope |
+| Phase | Purpose | Major Scope |
 |---|---|---|
-| **Phase I — Enterprise Architecture Foundation** | Establish the business and architecture contract | Business context, pain points, objectives, stakeholders, FRs, NFRs, current state, gap analysis, target state |
-| **Phase II — Detailed Solution Architecture** | Translate requirements into implementable architecture | Data, Security, Integration, AI/ML architecture and Azure technology decisions |
-| **Phase III — Data Foundation & Predictive AI** | Build the governed data and predictive intelligence layer | Source validation, DQ, Bronze/Silver/Gold, features, temporal validation, model comparison |
-| **Phase IV — Production AI & Application Delivery** | Operationalize the platform | Endpoints, APIs, RAG, human approval, CI/CD, observability, security, rollback |
+| **Phase I — Enterprise Architecture Foundation** | Establish the business and architecture contract | Business context, goals, stakeholders, FRs, NFRs, current state, gap analysis, target state |
+| **Phase II — Detailed Solution Architecture** | Convert requirements into implementable technical architecture | Data, Security, Integration, AI/ML architecture |
+| **Phase III — Data Foundation & Predictive AI** | Build governed data and predictive evidence | Source validation, DQ, Bronze/Silver/Gold, features, temporal validation, model comparison |
+| **Phase IV — Production AI & Application Delivery** | Operationalize the platform | Serving, APIs, RAG, HITL, MLOps, observability, security, release controls |
 
 ```mermaid
 flowchart LR
@@ -254,19 +708,42 @@ flowchart LR
     P3["PHASE III<br/>Data + Predictive AI"]
     P4["PHASE IV<br/>Production AI"]
 
-    P1 --> P2
-    P2 --> P3
-    P3 --> P4
+    A1["Business Case<br/>Goals<br/>Stakeholders<br/>FR / NFR"]
+    A2["Data<br/>Security<br/>Integration<br/>AI / ML"]
+    A3["Raw → Bronze → Silver → Gold<br/>Features<br/>Models"]
+    A4["Serving<br/>Decision API<br/>RAG<br/>Governance"]
 
-    P1A["Business Requirements<br/>NFRs<br/>Current State<br/>Gap Analysis<br/>Target State"]
-    P2A["Data<br/>Security<br/>Integration<br/>AI / ML"]
-    P3A["Raw → Bronze → Silver → Gold<br/>Features<br/>Validation<br/>Models"]
-    P4A["Endpoints<br/>Decision API<br/>RAG<br/>Monitoring<br/>CI / CD"]
+    G1{"Architecture Gate"}
+    G2{"Design Gate"}
+    G3{"Model Gate"}
+    G4{"Production Gate"}
 
-    P1 --> P1A
-    P2 --> P2A
-    P3 --> P3A
-    P4 --> P4A
+    P1 --> A1 --> G1
+    G1 -->|PASS| P2
+
+    P2 --> A2 --> G2
+    G2 -->|PASS| P3
+
+    P3 --> A3 --> G3
+    G3 -->|PASS| P4
+
+    P4 --> A4 --> G4
+
+    G1 -->|REWORK| A1
+    G2 -->|REWORK| A2
+    G3 -->|REWORK| A3
+    G4 -->|NO-GO| A4
+
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef data fill:#DCFCE7,stroke:#16A34A,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef decision fill:#FEF9C3,stroke:#CA8A04,color:#0F172A,stroke-width:2px;
+    classDef general fill:#FFFFFF,stroke:#334155,color:#0F172A,stroke-width:2px;
+
+    class P1,P2,A1,A2 general;
+    class P3,A3 data;
+    class P4,A4 ai;
+    class G1,G2,G3,G4 decision;
 ```
 
 The implementation is intentionally architecture-led.
@@ -279,13 +756,13 @@ It did **not** begin with model training.
 
 ## Primary Benchmark
 
-The active predictive-AI implementation uses:
+The active predictive implementation uses:
 
 **LeakG3PD — Net3**
 
-Earlier enterprise and solution architecture work used **BattLeDIM / L-Town** as the reference benchmark.
+Earlier Phase I / Phase II architecture used **BattLeDIM / L-Town** as the original benchmark baseline.
 
-The change is treated as an architecture decision rather than silently rewriting project history.
+The benchmark change is treated as an architecture evolution rather than silently rewriting project history.
 
 ```text
 BattLeDIM / L-Town
@@ -294,15 +771,12 @@ Architecture Baseline
 LeakG3PD / Net3
 Primary Implementation Benchmark
         ↓
-Additional Networks / BattLeDIM
+Additional Scenarios / Networks
+        ↓
 External Generalization Validation
 ```
 
-The formal decision should be retained under:
-
-```text
-docs/architecture/decisions/ADR-001-dataset-selection.md
-```
+Cross-network production generalization has **not** been claimed.
 
 ---
 
@@ -315,7 +789,7 @@ ADLS Gen2
 │   └── Immutable source evidence
 │
 ├── bronze/
-│   └── Structured ingestion + source metadata
+│   └── Structured ingestion + provenance
 │
 ├── silver/
 │   └── Validated, standardized, aligned telemetry
@@ -324,147 +798,201 @@ ADLS Gen2
     └── ML-ready and analytics-ready governed products
 ```
 
-### Raw Layer
+### Raw
 
-The Raw layer preserves:
+Preserves:
 
-- original source files,
+- original source evidence,
 - source fidelity,
 - provenance,
-- scenario information,
+- scenario context,
 - replay and reprocessing capability.
 
-Raw data is not overwritten by downstream transformation logic.
+### Bronze
 
-### Bronze Layer
+Provides:
 
-Bronze provides:
+- explicit schema,
+- source metadata,
+- ingestion timestamp,
+- schema version,
+- source-type tracking,
+- row-level SHA-256 traceability.
 
-- explicit schemas,
-- ingestion metadata,
-- source identifiers,
-- scenario identifiers,
-- structured Delta/Parquet-ready ingestion.
+### Silver
 
-### Silver Layer
+Provides:
 
-Silver provides:
-
-- timestamp normalization,
-- canonical sensor identifiers,
-- unit standardization,
-- duplicate handling,
-- missing-value controls,
-- pressure/flow/demand alignment,
+- UTC timestamp normalization,
+- canonical sensor/node identifiers,
+- PSI pressure standardization,
+- GPM flow standardization,
+- GPM demand standardization,
+- topology validation,
 - label alignment,
-- network-reference validation.
+- duplicate handling,
+- invalid-record quarantine.
 
-Invalid records are quarantined instead of silently discarded.
+### Gold
 
-### Gold Layer
-
-Gold publishes:
+Provides:
 
 - ML-ready telemetry,
-- aligned targets,
-- engineered features,
-- topology context,
-- operational KPIs,
-- governed analytical products.
+- lag features,
+- rates of change,
+- rolling statistics,
+- temporal features,
+- network-degree context,
+- future leak target,
+- reusable governed feature products.
 
 ---
 
-# Data & Predictive AI Lifecycle
+# Predictive AI Architecture
 
 ```mermaid
 flowchart LR
 
-    A["LeakG3PD Net3<br/>Raw Source"]
+    subgraph ACQUIRE["1 · ACQUIRE"]
+        A1["LeakG3PD Net3"]
+        A2["Source Inventory"]
+        A3["Provenance"]
+        A4["Schema Inspection"]
+    end
 
-    B["Source Validation"]
-    C["Data Quality Gate"]
+    subgraph QUALITY["2 · VALIDATE"]
+        Q1["Timestamp Validation"]
+        Q2["Missingness"]
+        Q3["Duplicates"]
+        Q4["Range / Plausibility"]
+        Q5["Telemetry / Label Alignment"]
+        Q6{"Data Quality Gate"}
+        Q7["Quarantine / Remediation"]
+    end
 
-    D["Bronze<br/>Structured Ingestion"]
-    E["Silver<br/>Validated + Standardized"]
-    F["Gold<br/>ML-Ready Data"]
+    subgraph MEDALLION["3 · ENGINEER"]
+        M1["Raw"]
+        M2["Bronze"]
+        M3["Silver"]
+        M4["Gold"]
+    end
 
-    G["Feature Engineering"]
-    H["Leakage Check"]
+    subgraph FEATURES["4 · FEATURE ENGINEERING"]
+        F1["Pressure Features"]
+        F2["Flow Features"]
+        F3["Demand Features"]
+        F4["Temporal Features"]
+        F5["Topology Features"]
+        F6{"Leakage Check"}
+    end
 
-    I["Temporal<br/>Train"]
-    J["Temporal<br/>Validation"]
-    K["Temporal<br/>Test"]
+    subgraph VALIDATE["5 · TEMPORAL VALIDATION"]
+        V1["Training Window"]
+        V2["Validation Window"]
+        V3["Untouched Test Window"]
+        V4["Real-Only Holdout"]
+    end
 
-    L["Isolation Forest"]
-    M["Random Forest"]
-    N["XGBoost"]
+    subgraph MODEL["6 · MODEL SUITE"]
+        L1["Isolation Forest"]
+        L2["Random Forest"]
+        L3["XGBoost"]
+        L4["Advanced Models<br/>Only if justified"]
+    end
 
-    O["Technical Evaluation"]
-    P["Business-Cost Evaluation"]
-    Q["Scenario Stress Testing"]
+    subgraph EVAL["7 · EVALUATION"]
+        E1["Precision / Recall / F1"]
+        E2["PR-AUC"]
+        E3["Calibration"]
+        E4["Detection Delay"]
+        E5["False Alarm Frequency"]
+        E6["Business-Cost Proxy"]
+        E7["Scenario Robustness"]
+        E8{"Production Gate"}
+    end
 
-    R{"Production Gate"}
+    subgraph GOV["8 · MODEL GOVERNANCE"]
+        R1["MLflow Run"]
+        R2["Model Evidence"]
+        R3["Lineage"]
+        R4["Model Registry"]
+        R5["Human Approval"]
+    end
 
-    S["Azure ML<br/>Model Registry"]
-    T["Blue Deployment"]
-    U["Green Candidate"]
-    V["Controlled Promotion"]
+    A1 --> A2 --> A3 --> A4
 
-    A --> B
-    B --> C
+    A4 --> Q1
+    A4 --> Q2
+    A4 --> Q3
+    A4 --> Q4
+    A4 --> Q5
 
-    C --> D
-    D --> E
-    E --> F
+    Q1 --> Q6
+    Q2 --> Q6
+    Q3 --> Q6
+    Q4 --> Q6
+    Q5 --> Q6
 
-    F --> G
-    G --> H
+    Q6 -->|FAIL| Q7
+    Q7 -. "correct / replay" .-> Q1
 
-    H --> I
-    I --> J
-    J --> K
+    Q6 -->|PASS| M1 --> M2 --> M3 --> M4
 
-    I --> L
-    I --> M
-    I --> N
+    M4 --> F1
+    M4 --> F2
+    M4 --> F3
+    M4 --> F4
+    M4 --> F5
 
-    L --> O
-    M --> O
-    N --> O
+    F1 --> F6
+    F2 --> F6
+    F3 --> F6
+    F4 --> F6
+    F5 --> F6
 
-    O --> P
-    P --> Q
-    Q --> R
+    F6 -->|FAIL| Q7
 
-    R -->|Pass| S
-    R -->|Fail| G
+    F6 -->|PASS| V1 --> V2 --> V3
+    V1 --> V4
+    V2 --> V4
+    V3 --> V4
 
-    S --> T
-    T --> U
-    U --> V
+    V1 --> L1
+    V1 --> L2
+    V1 --> L3
+    V1 --> L4
+
+    L1 --> E1
+    L2 --> E1
+    L3 --> E1
+    L4 --> E1
+
+    E1 --> E2 --> E3 --> E4 --> E5 --> E6 --> E7 --> E8
+
+    E8 -->|FAIL| F1
+    E8 -->|PASS| R1 --> R2 --> R3 --> R4 --> R5
+
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef data fill:#DCFCE7,stroke:#16A34A,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef governance fill:#FFEDD5,stroke:#EA580C,color:#0F172A,stroke-width:2px;
+    classDef decision fill:#FEF9C3,stroke:#CA8A04,color:#0F172A,stroke-width:2px;
+    classDef risk fill:#FEE2E2,stroke:#DC2626,color:#0F172A,stroke-width:2px;
+    classDef external fill:#F3F4F6,stroke:#6B7280,color:#0F172A,stroke-width:2px;
+
+    class A1 external;
+    class A2,A3,A4,Q1,Q2,Q3,Q4,Q5,M1,M2,M3,M4,F1,F2,F3,F4,F5,V1,V2,V3,V4 data;
+    class L1,L2,L3,L4,E1,E2,E3,E4,E5,E6,E7 ai;
+    class Q6,F6,E8 decision;
+    class Q7 risk;
+    class R1,R2,R3,R4,R5 governance;
 ```
-
-The predictive-AI lifecycle includes:
-
-- source validation,
-- data-quality checks,
-- chronological train/validation/test separation,
-- leakage prevention,
-- real-versus-synthetic source tracking,
-- comparable model evaluation,
-- calibration analysis,
-- threshold sensitivity,
-- scenario stress testing,
-- business-cost analysis,
-- explicit model promotion gates.
 
 ---
 
 # Machine Learning Strategy
 
-Velaqua uses a **baseline-first model-development strategy**.
-
-Model complexity is introduced only when evidence supports it.
+Velaqua follows a **baseline-first, evidence-driven** model strategy.
 
 ## Implemented Model Families
 
@@ -474,196 +1002,206 @@ Model complexity is introduced only when evidence supports it.
 
 ## Advanced Candidate Families
 
-The architecture supports future evaluation of:
+Potential future evaluation includes:
 
 - Autoencoders
 - LSTM / temporal neural architectures
 - Graph Neural Networks
 
-Advanced models are not treated as automatically superior.
+Advanced models are not preferred simply because they are more sophisticated.
 
-Their adoption must demonstrate measurable improvement in generalization, detection delay, false-alarm burden, topology awareness, operational usefulness, or business value.
+They must demonstrate measurable improvement in:
+
+- generalization,
+- detection quality,
+- detection delay,
+- false-alarm burden,
+- localization,
+- topology awareness,
+- operational usefulness,
+- or business value.
 
 ---
 
-## Feature Engineering
+# Feature Engineering
 
-Feature families include:
+The implemented Gold feature pipeline includes:
 
 ### Pressure
 
-- rolling averages,
-- rolling standard deviation,
-- pressure deltas,
-- rate of change,
-- deviation from baseline,
-- network-relative behavior.
+- standardized pressure,
+- lag-1,
+- lag-2,
+- delta,
+- relative rate of change,
+- rolling mean over 3 timesteps,
+- rolling mean over 6 timesteps.
 
 ### Flow
 
-- rolling statistics,
-- flow change,
-- imbalance,
-- abnormal-flow signatures.
+- standardized flow,
+- lag-1,
+- delta,
+- relative rate of change,
+- rolling mean over 3 timesteps,
+- rolling mean over 6 timesteps.
 
 ### Demand
 
-- rolling demand,
-- demand deviation,
-- normalized consumption behavior.
+- standardized demand,
+- lag-1,
+- delta,
+- relative rate of change,
+- rolling mean over 3 timesteps,
+- rolling mean over 6 timesteps.
 
 ### Temporal
 
-- lag features,
-- rolling windows,
 - hour of day,
 - day of week,
-- time-dependent operating context.
+- weekend indicator.
 
 ### Network
 
-- sensor/node identifiers,
-- asset relationships,
-- hydraulic topology,
-- network neighborhood context.
+- node degree from EPANET network links.
+
+### Prediction Target
+
+- `target_leak_horizon`
+
+Identifier, target, direct label, timestamp, ingestion metadata, and source metadata are excluded from candidate model features.
 
 ---
 
-# Model Governance
+# Decision Intelligence & RAG
 
-Production selection is not based solely on accuracy.
+The Decision API converts model output into operational decision support.
 
-The evaluation framework considers:
+A prediction is enriched with:
 
-- Precision
-- Recall
-- F1
-- PR-AUC
-- Confusion matrix
-- False positives
-- False negatives
-- Detection delay
-- False-alarm frequency
-- Probability calibration
-- Threshold sensitivity
-- Business cost of missed leaks
-- Business cost of false alarms
-- Value of early detection
-- Scenario robustness
-- Representative-data sufficiency
-
-The lifecycle is traceable through:
-
-```text
-Dataset Version
-      ↓
-Feature Version
-      ↓
-Training Job
-      ↓
-Environment
-      ↓
-Evaluation
-      ↓
-Model Version
-      ↓
-Production Gate
-      ↓
-Approval
-      ↓
-Deployment
-```
-
-A production candidate should be attributable to its data version, feature logic, code revision, environment, hyperparameters, experiment run, evaluation results, approval record, and deployed version.
-
----
-
-# Decision Intelligence & Human Governance
-
-Velaqua converts predictive output into governed operational decision support rather than exposing an isolated model probability.
+- risk,
+- confidence,
+- evidence,
+- contextual information,
+- and a recommended action.
 
 ```mermaid
 flowchart LR
 
-    A["Telemetry"]
+    subgraph TELEMETRY["DATA / EVENT LANE"]
+        T1["Pressure / Flow / Demand"]
+        T2["Validated Gold Data"]
+        T3["Feature Vector"]
+    end
 
-    B["Predictive Model"]
+    subgraph AI["PREDICTIVE INTELLIGENCE"]
+        A1["Leak / Anomaly Model"]
+        A2["Model Score"]
+        A3["Risk Tier"]
+        A4["Confidence"]
+        A5["Network Context"]
+    end
 
-    C["Leak Probability"]
+    subgraph RAG["RAG EVIDENCE"]
+        R1["SOPs"]
+        R2["Maintenance Manuals"]
+        R3["Incident History"]
+        R4["Azure AI Search"]
+        R5["Azure OpenAI"]
+        R6["Grounded Evidence<br/>+ Citations"]
+    end
 
-    D["Decision Engine"]
+    subgraph OPS["OPERATIONS"]
+        O1["Network Operations Analyst"]
+        O2["Hydraulic Engineer"]
+        O3{"Incident Valid?"}
+        O4{"Material Action?"}
+        O5{"Human Authorization"}
+    end
 
-    E["Risk Tier"]
-    F["Confidence"]
-    G["Recommended Action"]
+    subgraph FIELD["FIELD EXECUTION"]
+        F1["Create Work Order"]
+        F2["Dispatch"]
+        F3["Inspect / Verify"]
+        F4["Repair / Mitigate"]
+        F5["Close Incident"]
+    end
 
-    H["SOPs / Manuals<br/>Incident History"]
+    subgraph FEEDBACK["LEARNING & GOVERNANCE"]
+        G1["Outcome Capture"]
+        G2["False-Positive Review"]
+        G3["Model Performance"]
+        G4["Drift Monitoring"]
+        G5["Business KPI Update"]
+        G6{"Change / Retraining Needed?"}
+    end
 
-    I["Azure AI Search"]
+    T1 --> T2 --> T3 --> A1
 
-    J["Azure OpenAI"]
+    A1 --> A2
+    A2 --> A3
+    A2 --> A4
+    A1 --> A5
 
-    K["Grounded<br/>Evidence Package"]
+    R1 --> R4
+    R2 --> R4
+    R3 --> R4
+    R4 --> R5 --> R6
 
-    L{"Material<br/>Field Action?"}
+    A3 --> O1
+    A4 --> O1
+    A5 --> O1
+    R6 --> O1
 
-    M["Operations Dashboard"]
+    O1 --> O2 --> O3
 
-    N{"Human Approval"}
+    O3 -->|NO| G2
+    O3 -->|YES| O4
 
-    O["CMMS / Work Order"]
+    O4 -->|NO| G1
+    O4 -->|YES| O5
 
-    P["Field Workflow"]
+    O5 -->|APPROVE| F1 --> F2 --> F3 --> F4 --> F5
+    O5 -->|DEFER / REJECT| G1
 
-    Q["Customer / Executive Workflow"]
+    F5 --> G1
 
-    R["Operational Outcome"]
+    G1 --> G2
+    G1 --> G3
+    G1 --> G5
+    G3 --> G4 --> G6
 
-    S["Monitoring + Future Learning"]
+    G6 -->|YES| A1
+    G6 -->|NO| G5
 
-    A --> B
-    B --> C
-    C --> D
+    G1 -. "closed-loop truth" .-> T2
 
-    D --> E
-    D --> F
-    D --> G
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef data fill:#DCFCE7,stroke:#16A34A,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef governance fill:#FFEDD5,stroke:#EA580C,color:#0F172A,stroke-width:2px;
+    classDef decision fill:#FEF9C3,stroke:#CA8A04,color:#0F172A,stroke-width:2px;
+    classDef external fill:#F3F4F6,stroke:#6B7280,color:#0F172A,stroke-width:2px;
 
-    H --> I
-    I --> J
-    J --> K
-
-    K --> D
-
-    E --> L
-    F --> L
-    G --> L
-    K --> L
-
-    L -->|No| M
-
-    L -->|Yes| N
-
-    N -->|Approved| O
-    N -->|Rejected / Deferred| M
-
-    O --> P
-    P --> Q
-
-    Q --> R
-    M --> R
-
-    R --> S
+    class T1 external;
+    class T2,T3 data;
+    class A1,A2,A3,A4,A5,R4,R5,R6 ai;
+    class R1,R2,R3 external;
+    class O1,O2,F1,F2,F3,F4,F5 human;
+    class O3,O4,O5,G6 decision;
+    class G1,G2,G3,G4,G5 governance;
 ```
 
-## Human Authorization Control
+## Human Authorization
 
-A high-risk recommendation does not automatically grant permission to perform a physical intervention.
+Material actions follow:
 
 ```text
 Prediction
    ↓
 Risk + Confidence
+   ↓
+Evidence
    ↓
 Recommended Action
    ↓
@@ -671,166 +1209,258 @@ Material Action?
    ↓
 YES
    ↓
-Human Approval Required
+Human Approval
    ↓
-Authorized Operator
-   ↓
-CMMS / Field Workflow
+Authorized Downstream Workflow
 ```
 
-This separation between **intelligence** and **authority** is a core safety and governance control.
+The model does not own operational authority.
 
 ---
 
-# Generative AI / RAG
+# GenAI / RAG Design
 
-The RAG layer provides **operational evidence**, not unrestricted autonomous advice.
+The RAG layer is designed as an **evidence service**.
 
 Potential knowledge sources include:
 
-- standard operating procedures,
-- maintenance manuals,
+- SOPs,
+- equipment manuals,
 - repair procedures,
-- asset guidance,
+- asset history,
 - historical incidents,
-- operational policies.
+- operating policies.
+
+The architecture uses:
 
 ```text
-Enterprise Knowledge
-        ↓
+Governed Knowledge
+       ↓
 Azure AI Search
-        ↓
-Retrieved Evidence
-        ↓
+       ↓
+Retrieved Context
+       ↓
 Azure OpenAI
-        ↓
-Grounded Evidence Package
-        ↓
+       ↓
+Grounded Evidence
+       ↓
 Decision Intelligence
+       ↓
+Human Review
 ```
 
-Implemented controls include:
+Production principles include:
 
-- document retrieval,
-- source citations,
-- bounded context,
-- grounding-oriented generation,
-- retry behavior,
-- safety blocklists,
+- bounded retrieval,
+- source attribution,
+- citations,
+- authorization-aware access,
+- safe output handling,
 - deterministic fallback,
-- retrieval-quality evaluation.
-
-If retrieval or generation fails, deterministic evidence can be returned rather than allowing the GenAI layer to block core decision processing.
-
----
-
-# Decision API
-
-The FastAPI decision service provides the operational intelligence layer.
-
-| Endpoint | Purpose |
-|---|---|
-| `GET /health` | Liveness |
-| `GET /ready` | Dependency and readiness status |
-| `POST /predict` | Generate risk, confidence, recommendation, and evidence |
-| `POST /incident` | Governed incident orchestration |
-| `POST /incident/approval` | Human approval or rejection |
-| `GET /kpi/executive` | Executive operational KPI summary |
-
-The service implements:
-
-- request IDs,
-- schema validation,
-- rate limiting,
-- RAG integration,
-- approval gating,
-- health/readiness checks,
-- configurable downstream integration contracts.
+- no autonomous material action.
 
 ---
 
 # Security Architecture
 
-The target production posture follows an **identity-first, Zero-Trust-aligned** architecture.
+The target security posture is **identity-first and Zero-Trust aligned**.
 
-Core controls include:
+```mermaid
+flowchart TB
 
-- Microsoft Entra ID
-- Managed Identity
-- Azure RBAC
-- Azure Key Vault
-- Azure API Management
-- Azure Policy
-- Microsoft Defender
-- Microsoft Sentinel
-- Private Endpoints / Private Link where justified
-- least privilege
-- encryption in transit
-- encryption at rest
-- auditable production approval
+    U["Authorized User / Operator"]
+    CI["GitHub Actions / Workload Identity"]
 
-## Repository Secret Policy
+    subgraph ID["IDENTITY PLANE"]
+        E["Microsoft Entra ID"]
+        RB["RBAC / Separation of Duties"]
+        KV["Key Vault"]
+    end
 
-The repository must not contain:
+    subgraph NET["NETWORK / ACCESS PLANE"]
+        APIM["API Management"]
+        PE["Private Endpoints / Private Link"]
+        VN["VNet / Segmentation"]
+    end
 
-- production credentials,
-- storage account keys,
-- SAS tokens,
-- API secrets,
-- private certificates,
-- service-principal passwords,
-- runtime `.env` files.
+    subgraph PLATFORM["DATA & AI PLANE"]
+        ADLS["ADLS Gen2"]
+        DBX["Databricks"]
+        AML["Azure ML"]
+        AIS["AI Search"]
+        AOAI["Azure OpenAI"]
+    end
 
-Configuration templates belong in:
+    subgraph SOC["SECURITY OPERATIONS"]
+        MON["Azure Monitor"]
+        LA["Log Analytics"]
+        DEF["Defender"]
+        SEN["Sentinel"]
+        POL["Azure Policy"]
+    end
 
-```text
-.env.example
+    U --> E --> RB --> APIM
+    CI --> E --> RB
+
+    RB --> KV
+
+    APIM --> VN --> PE
+
+    PE --> ADLS
+    PE --> AML
+    PE --> AIS
+    PE --> AOAI
+
+    ADLS --> DBX --> AML
+
+    ADLS -.-> MON
+    DBX -.-> MON
+    AML -.-> MON
+    APIM -.-> MON
+
+    MON --> LA --> SEN
+    DEF --> SEN
+    POL -.-> PLATFORM
+    POL -.-> NET
+
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef data fill:#DCFCE7,stroke:#16A34A,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef governance fill:#FFEDD5,stroke:#EA580C,color:#0F172A,stroke-width:2px;
+    classDef general fill:#FFFFFF,stroke:#334155,color:#0F172A,stroke-width:2px;
+
+    class U human;
+    class CI general;
+    class E,RB,KV,APIM,PE,VN,MON,LA,DEF,SEN,POL governance;
+    class ADLS,DBX data;
+    class AML,AIS,AOAI ai;
 ```
 
-Runtime secrets belong in approved secret-management and identity systems.
+## Security Principles
+
+- least privilege,
+- identity federation,
+- managed workload identity,
+- separation of duties,
+- no secrets in source control,
+- encryption at rest and in transit,
+- centralized logging,
+- explicit trust boundaries,
+- controlled ingress / egress,
+- auditable approvals,
+- safe failure,
+- rollback.
+
+## OT / Physical Safety
+
+Any future live OT or SCADA integration requires utility-specific:
+
+- segmentation,
+- remote-access policy,
+- cybersecurity assessment,
+- engineering review,
+- change management,
+- operational authorization.
+
+---
+
+# Threat Categories
+
+The architecture explicitly considers:
+
+- spoofed telemetry,
+- data poisoning,
+- training-data corruption,
+- unauthorized model promotion,
+- credential theft,
+- API abuse,
+- cross-tenant leakage,
+- prompt injection,
+- RAG / knowledge poisoning,
+- sensitive-data disclosure,
+- unsafe LLM output handling,
+- excessive AI agency,
+- model drift,
+- supply-chain compromise,
+- denial of service,
+- uncontrolled GenAI consumption,
+- unauthorized field-action generation.
 
 ---
 
 # MLOps & Release Engineering
 
-Velaqua treats model deployment as a controlled software-release process.
+Velaqua treats model release as a governed software-delivery process.
 
-```text
-Developer Change
-      ↓
-GitHub
-      ↓
-Pull Request
-      ↓
-Lint + Automated Tests
-      ↓
-Model Governance Gate
-      ↓
-Infrastructure / Deployment
-      ↓
-Blue Deployment
-      ↓
-Smoke Test
-      ↓
-Green Candidate
-      ↓
-Blue / Green Comparison
-      ↓
-Human Production Approval
-      ↓
-Promotion
-      ↓
-Monitoring
+```mermaid
+flowchart LR
+
+    DEV["Developer"]
+    GH["GitHub"]
+    CI["CI<br/>Lint + Tests"]
+    MG{"Model / Data Gate"}
+    REG["Model Registry"]
+    BLUE["Blue Deployment"]
+    GREEN["Green Candidate"]
+    TEST["Smoke / Integration / Comparison"]
+    APPROVE{"Human Production Approval"}
+    PROMOTE["Promote"]
+    ROLLBACK["Rollback"]
+
+    subgraph OBS["OBSERVABILITY"]
+        INF["Infrastructure"]
+        APP["Application"]
+        ML["ML / Drift"]
+        BUS["Business Outcomes"]
+    end
+
+    DEV --> GH --> CI --> MG
+
+    MG -->|PASS| REG
+    MG -->|FAIL| DEV
+
+    REG --> BLUE
+    REG --> GREEN
+
+    BLUE --> TEST
+    GREEN --> TEST
+
+    TEST --> APPROVE
+
+    APPROVE -->|APPROVE| PROMOTE
+    APPROVE -->|REJECT| ROLLBACK
+
+    PROMOTE -.-> INF
+    PROMOTE -.-> APP
+    PROMOTE -.-> ML
+    PROMOTE -.-> BUS
+
+    INF -. "SLO failure" .-> ROLLBACK
+    APP -. "service failure" .-> ROLLBACK
+    ML -. "model failure" .-> ROLLBACK
+
+    classDef human fill:#DBEAFE,stroke:#2563EB,color:#0F172A,stroke-width:2px;
+    classDef ai fill:#F3E8FF,stroke:#9333EA,color:#0F172A,stroke-width:2px;
+    classDef governance fill:#FFEDD5,stroke:#EA580C,color:#0F172A,stroke-width:2px;
+    classDef decision fill:#FEF9C3,stroke:#CA8A04,color:#0F172A,stroke-width:2px;
+    classDef risk fill:#FEE2E2,stroke:#DC2626,color:#0F172A,stroke-width:2px;
+    classDef general fill:#FFFFFF,stroke:#334155,color:#0F172A,stroke-width:2px;
+
+    class DEV human;
+    class GH,CI,TEST general;
+    class MG,APPROVE decision;
+    class REG,BLUE,GREEN,PROMOTE ai;
+    class ROLLBACK risk;
+    class INF,APP,ML,BUS governance;
 ```
 
 ## Continuous Integration
 
-The GitHub Actions CI workflow covers:
+The repository includes CI patterns covering:
 
 - Ruff linting,
 - unit tests,
 - API tests,
-- model tests,
 - schema tests,
 - data-quality tests,
 - model-governance tests,
@@ -839,240 +1469,376 @@ The GitHub Actions CI workflow covers:
 - approval-gate tests,
 - orchestration tests.
 
-## Continuous Delivery
+## Release Controls
 
-The deployment workflow includes:
+Release engineering includes:
 
-- quality gates,
-- model-performance validation,
-- Azure authentication,
-- Bicep deployment,
-- endpoint deployment,
-- blue/green comparison,
-- rollback validation,
-- protected production approval,
-- controlled promotion.
-
----
-
-# Blue / Green Release Strategy
-
-```text
-                   ┌───────────────┐
-                   │ Azure ML      │
-                   │ Endpoint      │
-                   └───────┬───────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-              ▼                         ▼
-       ┌─────────────┐           ┌─────────────┐
-       │    BLUE     │           │    GREEN    │
-       │ Current     │           │ Candidate   │
-       │ Production  │           │ Release     │
-       └─────────────┘           └─────────────┘
-              │                         │
-              └────────────┬────────────┘
-                           ▼
-                  Compare / Validate
-                           │
-                  ┌────────┴────────┐
-                  │                 │
-                  ▼                 ▼
-               Promote          Roll Back
-```
-
-Production changes are expected to be reversible.
+- model-performance gates,
+- data-sufficiency gates,
+- environment validation,
+- blue/green deployment,
+- smoke testing,
+- controlled promotion,
+- human approval,
+- rollback.
 
 ---
 
-# Observability
+# Observability & Resilience
 
-Observability is divided into four domains.
+Observability is divided into four primary layers.
 
 ## Infrastructure
 
-- CPU
-- memory
-- endpoint health
-- autoscaling behavior
-- availability
-- request volume
+- CPU,
+- memory,
+- endpoint health,
+- autoscaling,
+- availability,
+- throughput.
 
 ## Application
 
-- average latency
-- p95 latency
-- p99 latency
-- HTTP failures
-- timeouts
-- request IDs
-- dependency failures
+- average latency,
+- p95 latency,
+- p99 latency,
+- HTTP failures,
+- dependency failures,
+- timeouts,
+- request IDs.
 
-## Machine Learning
+## AI / ML
 
-- data quality
-- missingness
-- schema changes
-- feature drift
-- prediction drift
-- confidence drift
-- model quality
-- detection delay
+- schema changes,
+- missingness,
+- data drift,
+- prediction drift,
+- confidence drift,
+- calibration,
+- model quality,
+- detection delay.
 
 ## Business
 
-- leak alerts
-- false alarms
-- missed leaks
-- confirmed leaks
-- operator approvals
-- material field actions
-- detection-to-response time
-- operational outcomes
-
-Target observability services include:
-
-- Azure Monitor
-- Application Insights
-- Log Analytics
-- Azure ML monitoring
-- Microsoft Sentinel
+- incidents,
+- alert acceptance,
+- false alarms,
+- missed events,
+- approvals,
+- field actions,
+- confirmed outcomes,
+- detection-to-response time.
 
 ---
 
-# Current Validation Snapshot
+# Architecture NFR Guardrails
 
-The current repository reports the following engineering evidence.
+Phase I established initial architecture guardrails.
 
-| Control Domain | Current State |
+| Quality Attribute | Initial Architecture Target |
 |---|---|
-| Automated test suite | **35 passed, 0 failed** |
-| Ruff static analysis | **Passing** |
-| API contracts | Validated |
-| Schema / data-quality tests | Validated |
-| Model-governance tests | Validated |
-| Temporal validation logic | Implemented |
-| Model comparison | Implemented |
-| Scenario stress testing | Implemented |
-| RAG grounding controls | Implemented |
-| Human-action authorization | Implemented |
-| Blue / green automation | Implemented |
-| Rollback automation | Implemented |
-| Monitoring instrumentation | Implemented |
-| Production model evidence | **Blocked — insufficient representative real data** |
-| Final production approval | **Not granted** |
+| **Availability** | Core incident / decision services target ≥99.9% monthly availability |
+| **Event Latency** | Material streaming events available for evaluation within 60 seconds under normal load |
+| **Interactive Performance** | Operator-facing core content ≤2 seconds p95 |
+| **Synchronous Decision API** | Target <500 ms where synchronous scoring is required |
+| **Scalability** | Horizontal scaling without redesign of core services |
+| **Identity** | Federated workforce identity; managed/workload identities for services |
+| **Authorization** | Least privilege and separation of duties |
+| **Secrets** | No embedded credentials in code, notebooks, images, or repository configuration |
+| **Auditability** | Security, data, model, configuration, and operational decisions centrally logged |
+| **RTO** | Initial Tier-1 target: 4 hours |
+| **RPO** | Initial critical governed-state target: 15 minutes |
+| **Explainability** | Material recommendations include understandable evidence and confidence |
+| **Human Control** | High-impact actions require explicit authorization |
+| **Rollback** | Models, configuration, rules, and applications support controlled rollback |
+| **FinOps** | AI/cloud consumption is tagged, monitored, budgeted, and attributable |
 
-The distinction between **implemented controls** and **production-valid evidence** is intentional.
+These are architecture guardrails, not claims that every target has been demonstrated in the current reference environment.
+
+One authoritative production SLO contract must be approved before Go-Live.
+
+---
+
+# Model Governance
+
+Production model selection considers:
+
+### Technical
+
+- Precision
+- Recall
+- F1
+- PR-AUC
+- Confusion matrix
+- Calibration
+- Brier score
+- Threshold sensitivity
+
+### Operational
+
+- False-alarm frequency
+- Detection delay
+- Scenario robustness
+- Missed-event risk
+
+### Business
+
+- false-alarm cost proxy,
+- missed-leak cost proxy,
+- early-detection value proxy,
+- net-value proxy.
+
+Current business-cost values are model-comparison inputs—not validated customer ROI.
+
+## Lineage
+
+```text
+Source Data
+     ↓
+Dataset Version
+     ↓
+Feature Version
+     ↓
+Training Run
+     ↓
+Environment
+     ↓
+Model Version
+     ↓
+Evaluation
+     ↓
+Production Gate
+     ↓
+Approval
+     ↓
+Deployment
+     ↓
+Prediction
+     ↓
+Operational Decision
+     ↓
+Outcome
+```
+
+---
+
+# Responsible AI
+
+Responsible AI is treated as an operational control system rather than a statement of intent.
+
+Core controls include:
+
+- defined intended use,
+- prohibited autonomous use,
+- representative-data requirements,
+- temporal leakage controls,
+- explainable incident evidence,
+- confidence / uncertainty,
+- human authorization,
+- auditability,
+- drift monitoring,
+- retraining triggers,
+- rollback,
+- RAG grounding,
+- operational outcome capture.
+
+## Prohibited Autonomous Use
+
+Velaqua is not designed to allow an ML or GenAI component to independently:
+
+- operate pumps,
+- operate valves,
+- alter physical infrastructure,
+- dispatch field resources without approved policy,
+- create customer-impacting physical action,
+- bypass human authorization.
+
+---
+
+# FinOps & Business Value
+
+Cloud and AI consumption must remain attributable to business value.
+
+## Business Value Equation
+
+```text
+Annual Gross Benefit
+=
+Avoided Water-Loss Value
++ Avoided Field Dispatch Cost
++ Reduced Investigation Labor
++ Reduced Customer-Service Cost
++ Avoided Incident / Asset Cost
+```
+
+```text
+Annual Net Benefit
+=
+Annual Gross Benefit
+- Annual Platform Operating Cost
+```
+
+```text
+ROI
+=
+Annual Net Benefit / Annual Platform Operating Cost
+```
+
+The current project does **not** claim realized utility ROI.
+
+A valid production business case requires customer-specific operational and financial baselines.
+
+## Unit Economics
+
+Future production FinOps should track:
+
+```text
+Cost per monitored endpoint
+Cost per million telemetry observations
+Cost per 1,000 predictions
+Cost per confirmed incident
+Cost per RAG evidence request
+Cost per model-training run
+Cost per utility tenant
+```
+
+---
+
+# Current Validation Evidence
+
+## Architecture / Platform
+
+| Domain | Current Position |
+|---|---|
+| Architecture | Validated for controlled integration testing |
+| Security | Conditional; target-subscription validation required |
+| Data Governance | Implemented; production evidence pending |
+| Model Governance | **Blocked by real-data sufficiency** |
+| Blue / Green | Deployment and rollback path available |
+| Monitoring | Monitoring / alert topology implemented and reviewed |
+| RAG | Service and fallback behavior implemented |
+| CI/CD | Workflows configured and locally validated |
+| Final Production Approval | **Not granted** |
 
 ---
 
 # Current Model Evidence
 
-The current model snapshot is treated as engineering evidence, not production proof.
+The current model evidence is intentionally treated as **directional engineering evidence**, not production proof.
+
+Current repository evidence reports:
 
 ```text
-37 total rows
-3 real rows
-34 synthetic rows
+Dataset rows evaluated: 37
+Real training rows:       3
+Real validation rows:     1
+Real test rows:           1
+Real test leak events:    1
+Selected candidate:       Isolation Forest
+Production gate:          BLOCKED
 ```
 
-The real-only holdout is too small to support a defensible production performance claim.
+The one-row real test holdout makes current classification metrics statistically inconclusive.
 
-The model gate therefore requires minimum representative-data thresholds.
+The repository therefore does **not** claim that current benchmark metrics demonstrate production performance.
+
+## Current Data-Sufficiency Gate
 
 | Requirement | Minimum | Current | Status |
 |---|---:|---:|---|
-| Real training rows | 200 | 3 | **Blocked** |
-| Real validation rows | 30 | 1 | **Blocked** |
-| Real test rows | 100 | 1 | **Blocked** |
-| Real test leak events | 10 | 1 | **Blocked** |
+| Real training rows | 200 | 3 | **BLOCKED** |
+| Real validation rows | 30 | 1 | **BLOCKED** |
+| Real test rows | 100 | 1 | **BLOCKED** |
+| Real test leak events | 10 | 1 | **BLOCKED** |
 
-This prevents attractive metrics produced from an undersized holdout from being interpreted as production evidence.
+This gate is intentional.
 
-Current model evidence is available under:
-
-```text
-governance/model_findings_summary.md
-governance/model_classification_reports/
-ml/training/artifacts/model_suite/
-```
-
----
-
-# Operational Monitoring Snapshot
-
-Synthetic monitoring is currently used to validate instrumentation and alert logic.
-
-It is **not** treated as equivalent to live production telemetry.
-
-| Metric | Observed | Threshold | Status |
-|---|---:|---:|---|
-| Average latency | 145.09 ms | < 350 ms | Pass |
-| P95 latency | 201.59 ms | < 1,000 ms | Pass |
-| P99 latency | 218.02 ms | < 1,500 ms | Pass |
-| Availability | 99.67% | >= 99.5% | Pass |
-| Error rate | 0.67% | < 1% | Pass |
-| Average CPU | 33.72% | < 80% | Pass |
-| Average memory | 47.95% | < 80% | Pass |
-| Prediction drift PSI | 0.032 | < 0.2 | Pass |
-| Confidence drift PSI | 0.205 | < 0.2 | **Watch** |
-| Missing value rate | 7.98% | < 3% | **Watch** |
-| Average detection delay | 6.88 min | < 20 min | Pass |
-
-Synthetic false-alarm and missed-leak metrics are not considered production-valid outcome evidence.
-
-Monitoring evidence is available under:
-
-```text
-governance/monitoring_report.json
-governance/slo_and_alerts.md
-docs/monitoring_validation_playbook.md
-```
+A technically attractive score from an undersized holdout must not be promoted as production evidence.
 
 ---
 
 # Production Release Gates
 
-Production promotion requires:
+Production promotion requires all of the following:
 
-- representative real-data sufficiency,
-- model-quality acceptance,
-- temporal validation,
-- scenario robustness,
-- endpoint smoke tests,
-- load validation,
-- timeout validation,
-- security validation,
-- monitoring validation,
-- blue/green comparison,
-- rollback validation,
-- accountable human approval,
-- production SLO acceptance.
+1. **Representative data**
+   - real-data minimums satisfied,
+   - representative operating conditions,
+   - sufficient leak-event coverage.
 
-## Current Release Blockers
+2. **Model validation**
+   - performance gate passed,
+   - temporal validation passed,
+   - scenario robustness evaluated,
+   - calibration reviewed.
 
-**1. Representative real-data sufficiency**
+3. **Data governance**
+   - schema and DQ controls validated,
+   - lineage complete,
+   - production ownership assigned.
 
-The current model snapshot does not meet the required real-data minimums.
+4. **Security**
+   - target Azure environment reviewed,
+   - identity / authorization approved,
+   - secrets externalized,
+   - network posture reviewed,
+   - security monitoring enabled.
 
-**2. Final production approval**
+5. **Application**
+   - API contract validation,
+   - error handling,
+   - readiness checks,
+   - load / timeout testing.
 
-The production approval artifact remains incomplete and must contain accountable approver metadata before promotion.
+6. **GenAI / RAG**
+   - retrieval grounding evaluated,
+   - citation behavior verified,
+   - safe failure behavior approved,
+   - no autonomous material authority.
 
-**3. Production-like monitoring evidence**
+7. **MLOps**
+   - model registration,
+   - version lineage,
+   - blue/green validation,
+   - rollback test.
 
-Synthetic monitoring validates instrumentation but must be replaced or corroborated by representative operational telemetry.
+8. **Observability**
+   - infrastructure,
+   - application,
+   - data,
+   - model,
+   - business KPIs.
 
-**4. Target Azure environment validation**
+9. **Resilience**
+   - recovery procedures,
+   - rollback,
+   - backup / restore validation,
+   - approved RTO / RPO.
 
-Cloud-dependent endpoint, security, monitoring, RAG, networking, and scaling controls must be verified in the intended production environment.
+10. **Human approval**
+    - accountable approver,
+    - approval timestamp,
+    - scope,
+    - release/change reference,
+    - audit evidence.
 
-### Current Verdict
+---
 
-> **PRE-PRODUCTION — NO-GO for unrestricted production promotion until the release blockers are resolved.**
+# Current Production Decision
 
-A production AI platform should be capable of returning **NO-GO** when the available evidence does not support a safe release.
+> ## **NO-GO — PRE-PRODUCTION REFERENCE IMPLEMENTATION**
+
+Current production promotion remains blocked by:
+
+- insufficient representative real model evidence,
+- incomplete final production approval,
+- target-Azure-environment validation,
+- production-level monitoring evidence,
+- authoritative SLO reconciliation.
+
+This status is deliberate.
+
+> **A mature AI system must be capable of returning NO-GO when the available evidence does not support a safe release.**
 
 ---
 
@@ -1095,7 +1861,8 @@ Velaqua-Water-intelligence-Platform/
 │   ├── blue_green_release_runbook.md
 │   ├── cicd_and_governance_checklist.md
 │   ├── monitoring_validation_playbook.md
-│   └── rag_quality_and_safety.md
+│   ├── rag_quality_and_safety.md
+│   └── vscode_boilerplate_walkthrough.md
 │
 ├── governance/
 │   ├── model_classification_reports/
@@ -1134,10 +1901,8 @@ Velaqua-Water-intelligence-Platform/
 │   │   ├── config/
 │   │   ├── jobs/
 │   │   └── workflows/
-│   │
 │   ├── ingestion/
 │   │   └── adf/
-│   │
 │   └── streaming/
 │
 ├── scripts/
@@ -1158,68 +1923,30 @@ Velaqua-Water-intelligence-Platform/
 
 ---
 
-# Formal Architecture Package
+# Engineering Evidence
 
-The next documentation layer for the repository is:
-
-```text
-docs/architecture/
-│
-├── README.md
-│
-├── diagrams/
-│   ├── azure-ai-system.mmd
-│   ├── azure-ai-system.svg
-│   ├── predictive-ai-lifecycle.mmd
-│   ├── predictive-ai-lifecycle.svg
-│   ├── decision-governance.mmd
-│   └── decision-governance.svg
-│
-├── phase-01-enterprise-foundation/
-│   ├── README.md
-│   ├── Velaqua_Phase_I_Enterprise_Architecture.pdf
-│   └── diagrams/
-│
-├── phase-02-solution-architecture/
-│   ├── README.md
-│   ├── Velaqua_Phase_II_Solution_Architecture.pdf
-│   └── diagrams/
-│
-├── phase-03-data-predictive-ai/
-│   ├── README.md
-│   ├── Velaqua_Phase_III_Data_Predictive_AI.pdf
-│   └── diagrams/
-│
-├── phase-04-production-ai/
-│   └── README.md
-│
-└── decisions/
-    ├── ADR-001-dataset-selection.md
-    ├── ADR-002-medallion-architecture.md
-    ├── ADR-003-model-serving.md
-    ├── ADR-004-human-approval-control.md
-    └── ADR-005-rag-evidence-pattern.md
-```
-
-The Phase I, II, and III formal architecture reports should be published as **PDF** for repository review.
-
-Editable DOCX source files may also be retained separately, but PDF and Markdown should be the primary GitHub-facing documentation formats.
-
----
-
-# Architecture Decision Records
-
-Major architectural decisions should be preserved through ADRs.
-
-| ADR | Decision |
+| Capability | Repository Evidence |
 |---|---|
-| **ADR-001** | LeakG3PD / Net3 selected as the primary implementation benchmark |
-| **ADR-002** | Medallion architecture selected for governed telemetry processing |
-| **ADR-003** | Azure Machine Learning selected for model lifecycle and serving |
-| **ADR-004** | Human authorization required for material operational actions |
-| **ADR-005** | RAG used as an evidence service rather than autonomous decision authority |
-
-This makes significant design evolution explicit and auditable.
+| Architecture mapping | `docs/architecture.md` |
+| Data engineering | `platform/databricks/` |
+| Batch ingestion | `platform/ingestion/` |
+| Streaming integration | `platform/streaming/` |
+| ML training | `ml/training/` |
+| Model serving | `ml/deployment/` |
+| Decision intelligence | `services/decision_api/` |
+| GenAI / RAG | `services/rag_service/` |
+| Infrastructure as Code | `infra/bicep/` |
+| Automated tests | `tests/` |
+| CI/CD | `.github/workflows/` |
+| Model findings | `governance/model_findings_summary.md` |
+| Monitoring evidence | `governance/monitoring_report.json` |
+| Ownership / procedures | `governance/ownership_and_procedures.md` |
+| SLOs / alerts | `governance/slo_and_alerts.md` |
+| Production readiness | `governance/production_readiness_review.md` |
+| Production approval | `governance/production_approval_record.json` |
+| Blue / green runbook | `docs/blue_green_release_runbook.md` |
+| Monitoring playbook | `docs/monitoring_validation_playbook.md` |
+| RAG safety | `docs/rag_quality_and_safety.md` |
 
 ---
 
@@ -1232,49 +1959,43 @@ Recommended development environment:
 ```text
 Python: 3.11
 IDE: VS Code
-Cloud: Microsoft Azure
 Source Control: Git / GitHub
+Cloud Target: Microsoft Azure
 ```
 
-Depending on the workflow, Azure access may be required for:
+Azure workflows may require access to:
 
-- Azure Machine Learning
-- ADLS Gen2
-- Azure Databricks
-- Azure AI Search
-- Azure OpenAI
-- Azure Monitor
-- Application Insights
-- Microsoft Sentinel
+- Azure Machine Learning,
+- ADLS Gen2,
+- Azure Databricks,
+- Azure AI Search,
+- Azure OpenAI,
+- Azure Monitor,
+- Application Insights,
+- Microsoft Sentinel.
 
----
-
-## Clone the Repository
+## Clone
 
 ```bash
 git clone https://github.com/DougMoore123/Velaqua-Water-intelligence-Platform.git
 cd Velaqua-Water-intelligence-Platform
 ```
 
----
+## Create Environment
 
-## Create Virtual Environment
-
-### Linux / Azure ML Compute
+Linux / Azure ML Compute:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
-### Windows
+Windows:
 
 ```powershell
 py -3.11 -m venv .venv
 .venv\Scripts\activate
 ```
-
----
 
 ## Install Dependencies
 
@@ -1290,36 +2011,49 @@ pip install pytest ruff
 
 ---
 
-# Local Service Development
-
-Docker Compose can start both primary application services:
+# Local Services
 
 ```bash
 docker compose up
 ```
 
-| Service | Port |
+| Service | Default Port |
 |---|---:|
 | Decision Intelligence API | `8000` |
 | RAG Evidence Service | `8001` |
 
-Or run each service independently.
-
-### RAG Service
+Run independently:
 
 ```bash
-uvicorn services.rag_service.app.main:app \
-  --reload \
-  --port 8001
+uvicorn services.rag_service.app.main:app --reload --port 8001
 ```
-
-### Decision API
 
 ```bash
-uvicorn services.decision_api.app.main:app \
-  --reload \
-  --port 8000
+uvicorn services.decision_api.app.main:app --reload --port 8000
 ```
+
+---
+
+# Decision API
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /health` | Liveness |
+| `GET /ready` | Dependency / readiness status |
+| `POST /predict` | Generate governed decision output |
+| `POST /incident` | Incident orchestration |
+| `POST /incident/approval` | Human approval / rejection |
+| `GET /kpi/executive` | Executive operational KPI summary |
+
+The service architecture includes:
+
+- request IDs,
+- schema validation,
+- rate limiting,
+- evidence retrieval,
+- human-approval logic,
+- downstream integration contracts,
+- health and readiness interfaces.
 
 ---
 
@@ -1331,25 +2065,25 @@ Run static analysis:
 ruff check services ml scripts tests platform
 ```
 
-Run the complete automated test suite:
+Run tests:
 
 ```bash
 pytest -q
 ```
 
-The CI verification flow is:
+The verification model includes:
 
 ```text
 Lint
- ↓
+  ↓
 Unit Tests
- ↓
+  ↓
 API Tests
- ↓
+  ↓
 Model Tests
- ↓
+  ↓
 Schema / Data Quality Tests
- ↓
+  ↓
 Deployment / Governance Tests
 ```
 
@@ -1357,28 +2091,28 @@ Deployment / Governance Tests
 
 # Model Training
 
-Primary model-development code lives under:
+Primary model-development code:
 
 ```text
 ml/training/src/
 ```
 
-The current model suite includes:
+The current implementation supports:
 
-- temporal train/validation/test splitting,
-- real-only holdout support,
-- leakage detection,
+- temporal splitting,
+- real-only holdout behavior,
+- feature leakage checks,
 - Isolation Forest,
 - Random Forest,
 - XGBoost,
 - calibration,
-- threshold sweeps,
+- threshold analysis,
 - PR-AUC,
 - detection delay,
 - false-alarm frequency,
-- business-cost scoring,
-- MLflow logging,
-- data-sufficiency gates.
+- business-cost proxy,
+- MLflow integration,
+- production data-sufficiency gates.
 
 Example:
 
@@ -1401,7 +2135,7 @@ python ml/training/src/train_model_suite.py \
 ./scripts/run_e2e_pipeline_v1.sh
 ```
 
-The workflow covers:
+Conceptually:
 
 ```text
 Candidate Validation
@@ -1412,7 +2146,13 @@ Blue Deployment
         ↓
 Smoke Test
         ↓
-Approval Validation
+Green Candidate
+        ↓
+Blue / Green Comparison
+        ↓
+Human Approval
+        ↓
+Promotion
 ```
 
 ## Deploy Green Candidate
@@ -1421,13 +2161,13 @@ Approval Validation
 ./scripts/deploy_green_candidate_v1.sh
 ```
 
-## Compare Blue and Green
+## Compare Blue / Green
 
 ```bash
 ./scripts/blue_green_compare_v1.sh | tee blue_green_compare.json
 ```
 
-## Promote Green
+## Promote
 
 ```bash
 COMPARE_REPORT=blue_green_compare.json \
@@ -1443,9 +2183,9 @@ COMPARE_REPORT=blue_green_compare.json \
 
 ---
 
-# Monitoring & SLOs
+# Monitoring
 
-Run the monitoring and security orchestration flow:
+Run monitoring/security orchestration:
 
 ```bash
 ./scripts/run_monitoring_security_orchestrator.sh
@@ -1460,52 +2200,33 @@ python scripts/monitor_operational_metrics.py \
   --output governance/monitoring_report.json
 ```
 
-The platform defines operational objectives around:
-
-- availability,
-- average latency,
-- p95 latency,
-- p99 latency,
-- error rate,
-- missing-data rate,
-- prediction drift,
-- confidence drift,
-- false alarms,
-- missed leaks,
-- detection delay.
-
 See:
 
 ```text
-governance/slo_and_alerts.md
 governance/monitoring.md
+governance/slo_and_alerts.md
+governance/monitoring_report.json
 docs/monitoring_validation_playbook.md
 ```
 
 ---
 
-# Engineering Evidence Index
+# Reference Frameworks
 
-| Capability | Evidence |
-|---|---|
-| Architecture mapping | `docs/architecture.md` |
-| Data engineering | `platform/databricks/` |
-| Batch ingestion | `platform/ingestion/` |
-| Streaming integration | `platform/streaming/` |
-| ML training | `ml/training/` |
-| Model serving | `ml/deployment/` |
-| Decision intelligence | `services/decision_api/` |
-| GenAI / RAG | `services/rag_service/` |
-| Infrastructure as Code | `infra/bicep/` |
-| Automated tests | `tests/` |
-| CI/CD | `.github/workflows/` |
-| Model findings | `governance/model_findings_summary.md` |
-| Monitoring evidence | `governance/monitoring_report.json` |
-| Production readiness | `governance/production_readiness_review.md` |
-| Production approval | `governance/production_approval_record.json` |
-| Blue / green runbook | `docs/blue_green_release_runbook.md` |
-| Monitoring runbook | `docs/monitoring_validation_playbook.md` |
-| RAG safety | `docs/rag_quality_and_safety.md` |
+Velaqua's architecture is informed by established enterprise, cloud, cybersecurity, AI-risk, OT-security, and FinOps practices, including:
+
+- Microsoft Azure Well-Architected guidance,
+- NIST AI Risk Management Framework,
+- NIST Cybersecurity Framework,
+- NIST operational-technology security guidance,
+- OWASP guidance for LLM / GenAI application risks,
+- FinOps practices for value, allocation, optimization, and unit economics.
+
+These are **design references only**.
+
+The project does not claim certification, regulatory compliance, or formal conformance to any framework.
+
+Customer-specific regulatory, contractual, cybersecurity, safety, and engineering requirements must be assessed independently.
 
 ---
 
@@ -1513,62 +2234,76 @@ docs/monitoring_validation_playbook.md
 
 ## Benchmark-Based Development
 
-The primary predictive implementation uses public benchmark/simulated water-network data rather than production telemetry from an operating utility.
+The current predictive implementation uses benchmark / simulated water-network data rather than operational telemetry from a production utility.
 
-Therefore, benchmark performance must not be interpreted as guaranteed production performance on an unseen physical network.
+Therefore:
 
-Production adoption requires utility-specific validation of:
+- benchmark performance is not guaranteed on an unseen physical network,
+- utility-specific calibration is required,
+- sensor behavior may differ,
+- hydraulic patterns may differ,
+- demand patterns may differ,
+- thresholds require operational validation.
 
-- telemetry distributions,
-- sensor behavior,
-- hydraulic conditions,
-- topology,
-- demand patterns,
-- operating thresholds,
-- field procedures,
-- enterprise integration interfaces.
+## Representative Data
 
-## Real-Data Model Evidence
+Current real model evidence is below the defined production minimum.
 
-The current production gate correctly identifies insufficient representative real-data coverage for unrestricted promotion.
+## Cross-Network Generalization
 
-## Synthetic Monitoring
+Generalization across utilities or substantially different network topologies is not yet demonstrated.
 
-Synthetic telemetry is suitable for testing instrumentation, pipelines, metrics, alerts, and drift logic.
+## External Integrations
 
-It does not replace representative production monitoring evidence.
+CMMS, field-service, customer-service, and other enterprise interfaces require customer-specific systems, identities, permissions, and contracts.
 
-## Enterprise Integrations
+## Production Azure Validation
 
-CMMS, field-service, customer-service, and dashboard integrations are represented through configurable contracts and endpoints.
+Some security, networking, managed-service, monitoring, and identity controls require validation in the intended Azure environment.
 
-Production integration requires organization-specific systems, identities, permissions, and credentials.
+## Human Approval Persistence
+
+Reference application logic demonstrates human approval behavior; production implementation requires durable, auditable persistence appropriate to the target operating environment.
+
+## GenAI
+
+RAG improves access to supporting information but does not eliminate:
+
+- retrieval failure,
+- irrelevant evidence,
+- misinformation risk,
+- prompt injection risk,
+- knowledge quality risk.
+
+Human review remains required for material decisions.
 
 ---
 
 # Roadmap
 
-Future platform expansion includes:
+Future expansion includes:
 
-- representative live utility telemetry,
-- additional LeakG3PD networks,
+- representative utility telemetry,
+- broader LeakG3PD scenario coverage,
+- additional network validation,
 - BattLeDIM external benchmarking,
 - cross-network generalization,
-- topology-aware graph modeling,
 - production AMI integration,
 - live SCADA integration,
 - GIS integration,
 - CMMS integration,
-- predictive asset maintenance,
 - demand forecasting,
-- pressure optimization,
+- predictive maintenance,
 - asset-risk scoring,
+- pressure optimization,
+- advanced topology-aware modeling,
 - production knowledge indexing,
-- operational dashboard implementation,
+- durable enterprise incident state,
 - advanced drift monitoring,
 - governed retraining workflows,
-- disaster-recovery testing,
-- multi-region resilience where justified by business requirements.
+- disaster-recovery exercises,
+- approved production SLOs,
+- multi-region resilience where justified.
 
 ---
 
@@ -1577,9 +2312,15 @@ Future platform expansion includes:
 Velaqua is intentionally designed as more than a machine-learning demonstration.
 
 ```text
-Business Problem
+Business Strategy
       ↓
-Requirements
+Business Goals
+      ↓
+Success Metrics
+      ↓
+Stakeholders / Decision Rights
+      ↓
+Functional & Non-Functional Requirements
       ↓
 Enterprise Architecture
       ↓
@@ -1603,16 +2344,16 @@ Human Authorization
       ↓
 Operational Execution
       ↓
-Monitoring
+Business Outcome
       ↓
 Continuous Improvement
 ```
 
-The objective is not simply to generate a leak prediction.
+The objective is not simply to produce a leak probability.
 
-The objective is to build an AI system whose predictions can be:
+The objective is to create an enterprise AI capability whose outputs can be:
 
-**validated, traced, governed, explained, challenged, operationalized, monitored, rolled back, and safely acted upon.**
+**measured, validated, traced, governed, explained, challenged, authorized, operationalized, monitored, rolled back, and safely acted upon.**
 
 ---
 
@@ -1620,37 +2361,36 @@ The objective is to build an AI system whose predictions can be:
 
 ## Pre-Production Reference Implementation
 
-The repository demonstrates engineering controls across:
+Velaqua demonstrates implemented architecture and engineering patterns across:
 
-- data ingestion,
-- medallion data engineering,
-- ML development,
+- enterprise architecture,
+- data engineering,
+- predictive AI,
 - temporal validation,
 - model governance,
-- serving,
-- decision intelligence,
-- RAG,
+- service APIs,
+- GenAI / RAG,
 - human approval,
 - CI/CD,
 - observability,
-- security,
-- blue/green deployment,
+- security architecture,
+- blue/green release,
 - rollback,
 - release governance.
 
-Velaqua is **not represented as an unrestricted production deployment**.
+It is **not represented as an unrestricted production deployment**.
 
 Production promotion remains blocked until:
 
 1. representative real-data requirements are satisfied,
-2. the selected model is retrained and revalidated,
-3. production-like telemetry monitoring is completed,
-4. Azure-dependent controls are verified in the target environment,
-5. final accountable production approval is recorded.
+2. model performance is rerun and revalidated,
+3. target-environment Azure controls are validated,
+4. production monitoring evidence is established,
+5. one authoritative SLO contract is approved,
+6. resilience controls are validated,
+7. final accountable production approval is recorded.
 
-That distinction is deliberate.
-
-> **A production AI system should be capable of returning NO-GO when the available evidence does not support a safe release.**
+> **A senior production AI architecture must be capable of returning NO-GO when the available evidence does not support a safe release.**
 
 ---
 
@@ -1664,8 +2404,6 @@ AI / Machine Learning · Data Science · AI Solutions Architecture
 
 ## Disclaimer
 
-Velaqua is a portfolio and reference implementation demonstrating enterprise AI architecture, predictive analytics, MLOps, GenAI/RAG, and water-utility decision intelligence.
+Velaqua is a portfolio and reference implementation demonstrating enterprise AI architecture, predictive analytics, MLOps, GenAI/RAG, operational decision intelligence, security architecture, and responsible AI governance.
 
-It is not intended to autonomously control physical water infrastructure without organization-specific engineering validation, cybersecurity review, operational approval, and human oversight.
-
-
+It is not intended to autonomously control physical water infrastructure without organization-specific hydraulic engineering validation, cybersecurity review, operational acceptance, production authorization, and human oversight.
