@@ -1,0 +1,5 @@
+$schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
+name: water-intel-batch
+auth_mode: aad_token
+defaults:
+  deployment_name: batch-v1

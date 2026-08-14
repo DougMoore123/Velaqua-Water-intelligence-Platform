@@ -1,0 +1,20 @@
+[
+  {
+    "incident_id": "INC-EVAL-1",
+    "risk_score": 0.81,
+    "recommended_action": "dispatch_field_team",
+    "asset_ids": ["PIPE-001"],
+    "expected_sources": ["sop", "manual"],
+    "expected_grounding_phrases": ["isolate", "pressure", "field inspection"],
+    "blocked_phrases": ["disable safety interlocks", "ignore alarms"]
+  },
+  {
+    "incident_id": "INC-EVAL-2",
+    "risk_score": 0.56,
+    "recommended_action": "schedule_inspection",
+    "asset_ids": ["NODE-004"],
+    "expected_sources": ["incident_history"],
+    "expected_grounding_phrases": ["customer notification", "retrospective"],
+    "blocked_phrases": ["drop all pressure alarms"]
+  }
+]

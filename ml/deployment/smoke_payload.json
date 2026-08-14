@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "pressure": 54.2,
+      "flow": 12.5,
+      "demand": 7.1,
+      "pressure_lag_1": 54.0,
+      "flow_lag_1": 12.4,
+      "demand_lag_1": 7.0,
+      "pressure_delta": 0.2,
+      "flow_delta": 0.1,
+      "demand_delta": 0.1,
+      "pressure_roll_avg_6": 53.9,
+      "flow_roll_avg_6": 12.3
+    }
+  ]
+}

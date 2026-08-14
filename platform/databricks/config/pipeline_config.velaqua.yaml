@@ -1,0 +1,25 @@
+raw_path: abfss://velaqua-data@stvelaquadata001.dfs.core.windows.net/raw
+bronze_path: abfss://velaqua-data@stvelaquadata001.dfs.core.windows.net/bronze/bronze_telemetry.parquet
+silver_path: abfss://velaqua-data@stvelaquadata001.dfs.core.windows.net/silver/silver_telemetry.parquet
+gold_path: abfss://velaqua-data@stvelaquadata001.dfs.core.windows.net/gold/gold_telemetry.parquet
+dq_report_path: abfss://velaqua-data@stvelaquadata001.dfs.core.windows.net/bronze/data_quality_report_json
+output_format: parquet
+quarantine_path: abfss://velaqua-data@stvelaquadata001.dfs.core.windows.net/silver/quarantine_records.parquet
+feature_dictionary_path: abfss://velaqua-data@stvelaquadata001.dfs.core.windows.net/gold/feature_dictionary_json
+prediction_horizon_steps: 1
+expected_columns:
+  - timestamp
+  - node_id
+  - pressure
+  - flow
+  - demand
+  - leak_label
+expected_files:
+  - leakg3pd_sample.csv
+  - leak_metadata.csv
+  - net3_nodes.csv
+  - net3_links.csv
+standard_units:
+  pressure: psi
+  flow: gpm
+  demand: gpm

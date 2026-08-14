@@ -1,0 +1,83 @@
+# -------------------------------
+# Python / Build / Test caches
+# -------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# -------------------------------
+# Virtual environments
+# -------------------------------
+.venv/
+venv/
+env/
+
+# -------------------------------
+# Environment and secrets
+# -------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.crt
+*.cer
+*.kdbx
+
+# -------------------------------
+# Notebook runtime artifacts
+# -------------------------------
+.ipynb_checkpoints/
+
+# -------------------------------
+# Logs / temp
+# -------------------------------
+*.log
+logs/
+tmp/
+temp/
+
+# -------------------------------
+# ML and experiment artifacts
+# -------------------------------
+mlruns/
+artifacts/
+ml/training/artifacts/
+*.joblib
+*.pkl
+*.pt
+*.onnx
+
+# -------------------------------
+# Data lake / local datasets
+# -------------------------------
+data/raw/
+data/raw_synthetic/
+data/bronze/
+data/silver/
+data/gold/
+*.parquet
+*.delta
+
+# -------------------------------
+# Azure / Databricks local outputs
+# -------------------------------
+.azureml/
+dbfs/
+
+# -------------------------------
+# Editor / OS
+# -------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

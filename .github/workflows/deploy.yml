@@ -1,0 +1,133 @@
+name: deploy-azure
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r services/decision_api/requirements.txt
+          pip install -r services/rag_service/requirements.txt
+          pip install -r ml/training/requirements.txt
+          pip install pytest ruff
+      - name: Run CI Test Pack
+        run: |
+          ruff check services ml scripts tests platform
+          pytest -q
+      - name: Model Performance Gate
+        run: python scripts/check_model_deployment_gate.py
+
+  deploy:
+    needs: quality-gates
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy Core Infra
+        run: |
+          az deployment group create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --template-file infra/bicep/main.bicep \
+            --parameters @infra/bicep/parameters.dev.json
+      - name: Configure AML Endpoints
+        env:
+          WORKSPACE_NAME: ${{ secrets.AZURE_ML_WORKSPACE }}
+          RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        run: |
+          chmod +x scripts/deploy_realtime_endpoint_v1.sh
+          ./scripts/deploy_realtime_endpoint_v1.sh
+          chmod +x scripts/deploy_green_candidate_v1.sh
+          ./scripts/deploy_green_candidate_v1.sh
+      - name: Blue Green Compare
+        env:
+          WORKSPACE_NAME: ${{ secrets.AZURE_ML_WORKSPACE }}
+          RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        run: |
+          chmod +x scripts/blue_green_compare_v1.sh
+          ./scripts/blue_green_compare_v1.sh | tee blue_green_compare.json
+      - name: Upload Compare Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: blue-green-compare
+          path: blue_green_compare.json
+      - name: Validate Rollback Path
+        env:
+          WORKSPACE_NAME: ${{ secrets.AZURE_ML_WORKSPACE }}
+          RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        run: |
+          chmod +x scripts/rollback_to_blue_v1.sh
+          ./scripts/rollback_to_blue_v1.sh
+      - name: Submit AML Training Pipeline
+        env:
+          AZURE_ML_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_ML_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          AZURE_ML_WORKSPACE: ${{ secrets.AZURE_ML_WORKSPACE }}
+        run: |
+          chmod +x scripts/submit_aml_pipeline.sh
+          ./scripts/submit_aml_pipeline.sh || true
+      - name: Deploy Databricks Workflow Job
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+          chmod +x scripts/deploy_databricks_job.sh
+          ./scripts/deploy_databricks_job.sh || true
+
+  production-approval:
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify Human Approval Gate
+        run: python scripts/check_human_approval_gate.py
+
+  promote-green:
+    needs: production-approval
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Compare Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: blue-green-compare
+          path: .
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Promote Green After Acceptance
+        env:
+          WORKSPACE_NAME: ${{ secrets.AZURE_ML_WORKSPACE }}
+          RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          COMPARE_REPORT: blue_green_compare.json
+        run: |
+          chmod +x scripts/promote_green_v1.sh
+          ./scripts/promote_green_v1.sh

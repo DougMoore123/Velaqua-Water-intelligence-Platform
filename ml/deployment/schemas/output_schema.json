@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WaterLeakInferenceOutput",
+  "type": "object",
+  "oneOf": [
+    {
+      "required": ["predictions", "model", "n_rows"],
+      "properties": {
+        "predictions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["score", "is_leak"],
+            "properties": {
+              "score": { "type": "number" },
+              "is_leak": { "type": "integer", "enum": [0, 1] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "model": {
+          "type": "object",
+          "required": ["name", "feature_count"],
+          "properties": {
+            "name": { "type": "string" },
+            "feature_count": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "n_rows": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    {
+      "required": ["error"],
+      "properties": {
+        "error": {
+          "type": "object",
+          "required": ["code", "message", "details"],
+          "properties": {
+            "code": { "type": "string" },
+            "message": { "type": "string" },
+            "details": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

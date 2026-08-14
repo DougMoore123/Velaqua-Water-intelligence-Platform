@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  rag-service:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: bash -lc "pip install -r services/rag_service/requirements.txt && uvicorn services.rag_service.app.main:app --host 0.0.0.0 --port 8001"
+    ports:
+      - "8001:8001"
+
+  decision-api:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: bash -lc "pip install -r services/decision_api/requirements.txt && uvicorn services.decision_api.app.main:app --host 0.0.0.0 --port 8000"
+    environment:
+      - RAG_SERVICE_URL=http://rag-service:8001
+    depends_on:
+      - rag-service
+    ports:
+      - "8000:8000"

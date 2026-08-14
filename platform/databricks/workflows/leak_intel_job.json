@@ -1,0 +1,79 @@
+{
+  "name": "water-intel-bronze-silver-gold",
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "data_quality_validate",
+      "spark_python_task": {
+        "python_file": "dbfs:/water-intel/jobs/data_quality_validate.py",
+        "parameters": []
+      },
+      "job_cluster_key": "default_cluster",
+      "timeout_seconds": 3600
+    },
+    {
+      "task_key": "bronze_ingest",
+      "depends_on": [
+        {
+          "task_key": "data_quality_validate"
+        }
+      ],
+      "spark_python_task": {
+        "python_file": "dbfs:/water-intel/jobs/bronze_ingest.py",
+        "parameters": []
+      },
+      "job_cluster_key": "default_cluster",
+      "timeout_seconds": 3600
+    },
+    {
+      "task_key": "silver_transform",
+      "depends_on": [
+        {
+          "task_key": "bronze_ingest"
+        }
+      ],
+      "spark_python_task": {
+        "python_file": "dbfs:/water-intel/jobs/silver_transform.py",
+        "parameters": []
+      },
+      "job_cluster_key": "default_cluster",
+      "timeout_seconds": 3600
+    },
+    {
+      "task_key": "gold_build",
+      "depends_on": [
+        {
+          "task_key": "silver_transform"
+        }
+      ],
+      "spark_python_task": {
+        "python_file": "dbfs:/water-intel/jobs/gold_build.py",
+        "parameters": []
+      },
+      "job_cluster_key": "default_cluster",
+      "timeout_seconds": 3600
+    }
+  ],
+  "job_clusters": [
+    {
+      "job_cluster_key": "default_cluster",
+      "new_cluster": {
+        "spark_version": "14.3.x-scala2.12",
+        "node_type_id": "Standard_DS3_v2",
+        "num_workers": 2,
+        "spark_conf": {
+          "spark.databricks.delta.preview.enabled": "true"
+        }
+      }
+    }
+  ],
+  "schedule": {
+    "quartz_cron_expression": "0 0/15 * * * ?",
+    "timezone_id": "UTC",
+    "pause_status": "PAUSED"
+  },
+  "email_notifications": {
+    "on_failure": []
+  },
+  "format": "MULTI_TASK"
+}

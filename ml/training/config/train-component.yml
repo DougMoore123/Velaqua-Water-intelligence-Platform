@@ -1,0 +1,23 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: water_leak_train_component
+display_name: Water Leak Train Component
+version: 1
+type: command
+
+inputs:
+  gold_data:
+    type: uri_file
+  random_state:
+    type: integer
+    default: 42
+
+outputs:
+  model_artifact:
+    type: uri_file
+
+code: ../../../
+environment: azureml://registries/azureml/environments/sklearn-1.5/versions/2
+command: >-
+  python ml/training/src/train.py
+  --gold-path ${{inputs.gold_data}}
+  --model-output ${{outputs.model_artifact}}

@@ -1,0 +1,8 @@
+{
+  "approved": false,
+  "approved_by": "",
+  "approved_at": "",
+  "change_ticket": "",
+  "scope": "green promotion to production",
+  "notes": "Set approved=true and populate approver metadata after final review."
+}

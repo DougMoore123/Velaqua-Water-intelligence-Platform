@@ -1,0 +1,47 @@
+{
+  "name": "water-intel-training-env",
+  "version": null,
+  "environmentVariables": {
+    "MLFLOW_TRACKING_URI": "azureml"
+  },
+  "python": {
+    "userManagedDependencies": false,
+    "interpreterPath": "python",
+    "condaDependenciesFile": "conda_dependencies.yml",
+    "baseCondaEnvironment": null
+  },
+  "docker": {
+    "enabled": false,
+    "baseImage": "mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:20251130.v1",
+    "baseDockerfile": null,
+    "buildContext": null,
+    "sharedVolumes": true,
+    "shmSize": "2g",
+    "arguments": [],
+    "baseImageRegistry": {
+      "address": null,
+      "username": null,
+      "password": null,
+      "registryIdentity": null
+    },
+    "platform": {
+      "os": "Linux",
+      "architecture": "amd64"
+    }
+  },
+  "spark": {
+    "repositories": [],
+    "packages": [],
+    "precachePackages": true
+  },
+  "databricks": {
+    "mavenLibraries": [],
+    "pypiLibraries": [],
+    "rcranLibraries": [],
+    "jarLibraries": [],
+    "eggLibraries": []
+  },
+  "r": null,
+  "inferencingStackVersion": null,
+  "assetId": null
+}

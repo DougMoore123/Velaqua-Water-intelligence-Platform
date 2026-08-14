@@ -1,0 +1,49 @@
+{
+  "name": "pl_ingest_raw_water_telemetry",
+  "properties": {
+    "description": "Copies batch source telemetry and network metadata into ADLS raw zone",
+    "activities": [
+      {
+        "name": "CopyLeakG3PDToRaw",
+        "type": "Copy",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 60
+        },
+        "typeProperties": {
+          "source": {
+            "type": "DelimitedTextSource"
+          },
+          "sink": {
+            "type": "ParquetSink"
+          }
+        }
+      },
+      {
+        "name": "CopyNet3ModelToRaw",
+        "type": "Copy",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 60
+        },
+        "typeProperties": {
+          "source": {
+            "type": "JsonSource"
+          },
+          "sink": {
+            "type": "JsonSink"
+          }
+        }
+      }
+    ],
+    "annotations": [
+      "raw-ingestion",
+      "batch",
+      "leak-detection"
+    ]
+  }
+}

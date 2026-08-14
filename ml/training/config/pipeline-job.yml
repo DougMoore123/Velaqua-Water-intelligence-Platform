@@ -1,0 +1,19 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: water-intel-train-pipeline
+experiment_name: water-intel-leak-detection
+settings:
+  default_compute: azureml:cpu-cluster
+
+inputs:
+  gold_data:
+    type: uri_file
+    path: azureml://datastores/velaqua_adls/paths/gold/gold_telemetry.parquet
+
+jobs:
+  train_leak_detector:
+    type: command
+    component: ./train-component.yml
+    inputs:
+      gold_data: ${{parent.inputs.gold_data}}
+      random_state: 42
